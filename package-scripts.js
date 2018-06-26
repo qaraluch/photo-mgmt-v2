@@ -15,6 +15,11 @@ module.exports = {
       default: {
         description: "ava test",
         script: "ava --verbose"
+      },
+      resetFixtures: {
+        description: "reset photos/film fixtures",
+        script:
+          "rm -rf ./test/fixtures/cu && cp -rf ./test/fixtures/cu-org ./test/fixtures/cu"
       }
     }
   },
