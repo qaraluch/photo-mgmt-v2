@@ -1,0 +1,32 @@
+{
+  "name": "photo-mgmt-v2",
+  "version": "0.1.0",
+  "description": "My personal photo managment scripts.",
+  "main": "src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Use nps!\" && exit 1"
+  },
+  "author": {
+    "name": "qaraluch",
+    "email": "prezenciq@gmail.com",
+    "url": "https://github.com/qaraluch"
+  },
+  "homepage": "https://github.com/qaraluch/photo-mgmt-v2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qaraluch/photo-mgmt-v2.git"
+  },
+  "files": [
+    "src/index.js"
+  ],
+  "devDependencies": {
+    "eslint": "5.0.1",
+    "ava": "0.25.0",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-import": "2.13.0",
+    "eslint-plugin-prettier": "2.6.1",
+    "nps-utils": "1.6.0",
+    "prettier": "1.13.6"
+  }
+}
