@@ -28,5 +28,8 @@
     "eslint-plugin-prettier": "2.6.1",
     "nps-utils": "1.6.0",
     "prettier": "1.13.6"
+  },
+  "dependencies": {
+    "qm-walk": "2.0.0"
   }
 }
