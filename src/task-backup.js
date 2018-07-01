@@ -96,7 +96,11 @@ function archiveIt(backupFilePath, toBackupFilesPaths) {
 
     archive.pipe(output);
 
-    toBackupFilesPaths.forEach(pth => archive.file(pth));
+    toBackupFilesPaths.forEach(pth => {
+      archive.file(pth, {
+        name: `${path.basename(backupFilePath, ".zip")}/${path.basename(pth)}`
+      });
+    });
 
     archive.finalize();
   });
