@@ -1,10 +1,16 @@
 const walk = require("qm-walk");
+const makeDir = require("make-dir");
 
 async function runTaskBackup(args) {
-  const { cu } = args;
-  const walkOutput = await getAllCuFiles(cu);
-  listReadFiles(walkOutput);
-  const backupPaths = copyPathsForBackup(walkOutput);
+  try {
+    const { cu, cuBackup } = args;
+    const walkOutput = await getAllCuFiles(cu);
+    await makeDir(cuBackup);
+    listReadFiles(walkOutput);
+    const backupPaths = copyPathsForBackup(walkOutput);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 async function getAllCuFiles(scanPath) {
