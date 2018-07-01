@@ -1,5 +1,8 @@
 const walk = require("qm-walk");
 const makeDir = require("make-dir");
+const fs = require("fs");
+const archiver = require("archiver");
+const path = require("path");
 
 async function runTaskBackup(args) {
   try {
@@ -7,12 +10,15 @@ async function runTaskBackup(args) {
     const walkOutput = await getAllCuFiles(cu);
     await makeDir(cuBackup);
     listReadFiles(walkOutput);
-    const backupPaths = copyPathsForBackup(walkOutput);
+    const toBackupFilesPaths = copyPathsForBackup(walkOutput);
     const backupFile = constructBackupFileName();
+    const backupFilePath = path.resolve(cuBackup, backupFile);
     console.log("About to create zip file:");
     console.log(` ${backupFile}`);
     console.log("in:");
     console.log(` ${cuBackup}`);
+    await archiveIt(backupFilePath, toBackupFilesPaths);
+    return;
   } catch (error) {
     console.error(error);
   }
@@ -21,7 +27,8 @@ async function runTaskBackup(args) {
 async function getAllCuFiles(scanPath) {
   const walkOutputExt = await walk({ path: scanPath });
   const paths = walkOutputExt.getExtendedInfo().result;
-  return paths;
+  const files = paths.map(item => item.isFile && item);
+  return files;
 }
 
 function listReadFiles(walkOutput) {
@@ -56,4 +63,42 @@ function getTimeStamp() {
   );
 }
 
+function archiveIt(backupFilePath, toBackupFilesPaths) {
+  return new Promise((resolve, reject) => {
+    const output = fs.createWriteStream(backupFilePath);
+    const archive = archiver("zip");
+
+    output.on("close", function() {
+      const size = archive.pointer();
+      console.log(size + " total bytes");
+      console.log(
+        "archiver has been finalized and the output file descriptor has closed."
+      );
+      resolve(size);
+    });
+
+    output.on("end", function() {
+      console.log("Data has been drained");
+    });
+
+    // good practice to catch warnings (ie stat failures and other non-blocking errors)
+    archive.on("warning", function(err) {
+      if (err.code === "ENOENT") {
+        console.log("Some ENOENT");
+      } else {
+        reject(err);
+      }
+    });
+
+    archive.on("error", function(err) {
+      reject(err);
+    });
+
+    archive.pipe(output);
+
+    toBackupFilesPaths.forEach(pth => archive.file(pth));
+
+    archive.finalize();
+  });
+}
 module.exports = runTaskBackup;
