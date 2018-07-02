@@ -11,6 +11,15 @@ const configTest = {
   cuSort: "./test/fixtures/cu-sort/"
 };
 
+const configCU = {
+  // Source dir Camera Upload from Dropbox
+  cu: "/mnt/g/Dropbox/Camera Uploads/",
+  // backup folder for CU
+  cuBackup: "/mnt/g/.temp/cuBackup/",
+  // Detination Dir for cu-presort
+  cuSort: "/mnt/g/Dropbox/mydrocsort/"
+};
+
 //commands:
 const commandBackup = {
   command: "backup",
@@ -18,7 +27,14 @@ const commandBackup = {
   checkArchive: true
 };
 
+const commandBackupReal = {
+  command: "backup",
+  config: "configCU",
+  checkArchive: true
+};
+
 runThis(commandBackup);
+// runThis(commandBackupReal);
 
 //index.js
 async function runThis(taskCommand) {
@@ -36,6 +52,11 @@ async function runThis(taskCommand) {
 }
 
 function chooseConfig(configName) {
-  const chosen = configName === "configTest" ? configTest : configTest;
+  const chosen =
+    configName === "configTest"
+      ? configTest
+      : configName === "configCU"
+        ? configCU
+        : configTest;
   return chosen;
 }
