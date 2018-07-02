@@ -12,7 +12,11 @@ const configTest = {
 };
 
 //commands:
-const commandBackup = { command: "backup", config: "configTest" };
+const commandBackup = {
+  command: "backup",
+  config: "configTest",
+  checkArchive: true
+};
 
 runThis(commandBackup);
 

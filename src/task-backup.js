@@ -3,10 +3,11 @@ const makeDir = require("make-dir");
 const fs = require("fs");
 const archiver = require("archiver");
 const path = require("path");
+const execa = require("execa");
 
 async function runTaskBackup(args) {
   try {
-    const { cu, cuBackup } = args;
+    const { cu, cuBackup, checkArchive } = args;
     const walkOutput = await getAllCuFiles(cu);
     await makeDir(cuBackup);
     listReadFiles(walkOutput);
@@ -18,6 +19,11 @@ async function runTaskBackup(args) {
     console.log("in:");
     console.log(` ${cuBackup}`);
     await archiveIt(backupFilePath, toBackupFilesPaths);
+    if (checkArchive) {
+      console.log("Checking archive file: ...");
+      const { stdout } = await execa.shell(`zipinfo -1s ${backupFilePath}`);
+      console.log(stdout);
+    }
     return;
   } catch (error) {
     console.error(error);
