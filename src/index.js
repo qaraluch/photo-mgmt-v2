@@ -1,5 +1,6 @@
 //task dependencies
-const taskBackup = require("./task-backup.js");
+const execTaskBackup = require("./task-backup.js");
+const execTaskPresortVids = require("./task-presort-vids.js");
 
 //configs:
 const configTest = {
@@ -33,8 +34,14 @@ const commandBackupReal = {
   checkArchive: true
 };
 
-runThis(commandBackup);
+const commandPresortVids = {
+  command: "presort-vids",
+  config: "configTest"
+};
+
+// runThis(commandBackup);
 // runThis(commandBackupReal);
+runThis(commandPresortVids);
 
 //index.js
 async function runThis(taskCommand) {
@@ -46,8 +53,10 @@ async function runThis(taskCommand) {
   console.log(` of CU dir: ${configChosen.cu}`);
   const taskCommandChosen =
     command === "backup"
-      ? await taskBackup(argsTaskCommand)
-      : console.log(`Not found this '${command}'!`);
+      ? await execTaskBackup(argsTaskCommand)
+      : command === "presort-vids"
+        ? await execTaskPresortVids(argsTaskCommand)
+        : console.log(`Not found this '${command}'!`);
   console.log("DONE!");
 }
 
