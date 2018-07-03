@@ -1,29 +1,31 @@
 const path = require("path");
 const R = require("ramda");
 
-function pullInfoFromWalk(walkOutput) {
-  const copyInfo = [...walkOutput.map(item => [item.path, item.name])];
-  return copyInfo;
-}
-
 const getExt = fileName => path.parse(fileName).ext;
 const getName = fileName => path.parse(fileName).name;
 
+function pullInfoFromWalk(walkOutput) {
+  const copyInfo = [
+    ...walkOutput.map(item => ({
+      path: item.path,
+      oldName: item.name,
+      oldBaseName: getName(item.name),
+      newExt: getExt(item.name)
+    }))
+  ];
+  return copyInfo;
+}
+
 function transformExtToLowerCase(item) {
-  const oldName = item[1];
-  const nameExt = getExt(oldName).toLowerCase();
-  const nameBase = getName(oldName);
-  const newItem = [...item, `${nameBase}${nameExt}`];
-  return newItem;
+  item.newExt = item.newExt.toLowerCase();
+  return item;
 }
 
 function transformExtLongJpeg(item) {
-  const oldName = item.pop();
-  const oldExt = getExt(oldName);
-  const nameExt = oldExt === ".jpeg" ? ".jpg" : oldExt;
-  const nameBase = getName(oldName);
-  const newItem = [...item, `${nameBase}${nameExt}`];
-  return newItem;
+  const oldExt = item.newExt;
+  const newExt = oldExt === ".jpeg" ? ".jpg" : oldExt;
+  item.newExt = newExt;
+  return item;
 }
 
 function doRenameFiles(walkOutput) {
