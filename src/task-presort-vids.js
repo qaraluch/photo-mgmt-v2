@@ -38,7 +38,10 @@ function pullInfoFromWalk(walkOutput) {
 }
 
 function transformExtToLowerCase(item) {
-  const newItem = [...item, "..."];
+  const oldName = item[1];
+  const nameExt = path.parse(oldName).ext.toLowerCase();
+  const nameBase = path.parse(oldName).name;
+  const newItem = [...item, `${nameBase}${nameExt}`];
   return newItem;
 }
 
