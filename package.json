@@ -36,6 +36,7 @@
     "make-dir": "1.3.0",
     "node-exiftool": "2.3.0",
     "qm-walk": "2.0.0",
-    "ramda": "0.25.0"
+    "ramda": "0.25.0",
+    "throat": "4.1.0"
   }
 }
