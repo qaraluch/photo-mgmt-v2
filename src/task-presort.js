@@ -13,7 +13,7 @@ async function runTaskPresort(args) {
     const renamedFiles = doRenameFiles(walkOutput);
     renamedFiles.forEach(
       // item => console.log(item)
-      item => console.log(item.oldName, " --> ", item.comment)
+      item => console.log(item.oldName, " --> ", item.newName)
     );
     return;
   } catch (error) {

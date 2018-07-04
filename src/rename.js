@@ -28,7 +28,8 @@ function doRenameFiles(walkOutput) {
     R.map(transformExtToLowerCase),
     R.map(transformExtLongJpeg),
     R.map(readPreexistedData),
-    R.map(addVersions)
+    R.map(addVersions),
+    R.map(reassemblyFileName)
   );
   const processedTransducer = R.into([], xform);
   const result = processedTransducer(copyInfoToRename);
@@ -62,6 +63,18 @@ function readPreexistedData(item) {
 
 function addVersions(item) {
   item.date && !item.version && (item.version = 0);
+  return item;
+}
+
+function reassemblyFileName(item) {
+  const { oldName, date, version = "", comment, newExt } = item;
+  const commentWithHyphen =
+    typeof comment === "undefined" ? "" : ` - ${comment}`;
+  if (date) {
+    item.newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+  } else {
+    item.newName = oldName;
+  }
   return item;
 }
 
