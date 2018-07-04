@@ -10,7 +10,9 @@ async function getExifData(walkOutput) {
   await ep.open();
   async function runCheck(item) {
     try {
-      item.exif = await ep.readMetadata(item.path, ["-File:all"]);
+      const info = await ep.readMetadata(item.path, ["-File:all"]);
+      item.exif = info.data[0];
+      if (info.error) throw info.error;
       return item;
     } catch (error) {
       throw error;

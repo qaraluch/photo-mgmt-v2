@@ -36,7 +36,7 @@ async function doRenameFiles(walkOutput) {
   const renamedFiles = processedTransducer(copyInfoToRename);
   const withExifData = await getExifData(renamedFiles);
   withExifData.forEach(item => {
-    console.log(item.oldName, " --> ", item.exif.data[0].Model);
+    console.log(item.oldName, " --> ", item.exif.Model);
   });
   const result = R.map(reassemblyFileName, renamedFiles);
   return result;
