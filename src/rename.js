@@ -22,17 +22,21 @@ function pullInfoFromWalk(walkOutput) {
   return copyInfo;
 }
 
-function doRenameFiles(walkOutput) {
+async function doRenameFiles(walkOutput) {
   const copyInfoToRename = pullInfoFromWalk(walkOutput);
   const xform = R.compose(
     R.map(transformExtToLowerCase),
     R.map(transformExtLongJpeg),
     R.map(readPreexistedData),
-    R.map(addVersions),
-    R.map(reassemblyFileName)
+    R.map(addVersions)
   );
   const processedTransducer = R.into([], xform);
-  const result = processedTransducer(copyInfoToRename);
+  const renamedFiles = processedTransducer(copyInfoToRename);
+  const withExifData = await getExifData(renamedFiles);
+  withExifData.forEach(item => {
+    console.log(item.oldName, " --> ", item.exif.data[0].Model);
+  });
+  const result = R.map(reassemblyFileName, renamedFiles);
   return result;
 }
 
@@ -76,6 +80,30 @@ function reassemblyFileName(item) {
     item.newName = oldName;
   }
   return item;
+}
+
+//Exif:
+
+const exiftool = require("node-exiftool");
+const exiftoolBin = require("dist-exiftool");
+//[Sobesednik/node-exiftool: A Node.js interface to exiftool command-line application.](https://github.com/Sobesednik/node-exiftool)
+// npm i node-exiftool
+
+async function getExifData(walkOutput) {
+  const ep = new exiftool.ExiftoolProcess(exiftoolBin);
+  await ep.open();
+  async function runCheck(item) {
+    try {
+      item.exif = await ep.readMetadata(item.path, ["-File:all"]);
+      return item;
+    } catch (error) {
+      throw error;
+    }
+  }
+  const promises = walkOutput.map(runCheck);
+  const newWalkOutput = await Promise.all(promises);
+  await ep.close();
+  return newWalkOutput;
 }
 
 module.exports = {
