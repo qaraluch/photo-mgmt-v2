@@ -57,7 +57,7 @@ function readPreexistedData(item) {
   item.date = match && match.groups.date;
   item.version = match && match.groups.version;
   item.comment = match && match.groups.comment;
-  item.comment && item.comment.trim();
+  item.comment && (item.comment = item.comment.trim());
   return item;
 }
 
