@@ -11,8 +11,9 @@ async function runTaskPresort(args) {
     listReadFiles(walkOutput);
     console.log("About to rename files...");
     const renamedFiles = doRenameFiles(walkOutput);
-    renamedFiles.forEach(item =>
-      console.log(item.oldName, " --> ", item.newExt)
+    renamedFiles.forEach(
+      // item => console.log(item)
+      item => console.log(item.oldName, " --> ", item.comment)
     );
     return;
   } catch (error) {
