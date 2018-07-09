@@ -11,10 +11,10 @@ async function runTaskPresort(args) {
     listReadFiles(walkOutput);
     console.log("About to rename files...");
     const renamedFiles = await doRenameFiles(walkOutput);
-    // renamedFiles.forEach(
-    // item => console.log(item)
-    // item => console.log(item.oldName, " --> ", item.newName)
-    // );
+    renamedFiles.forEach(
+      // item => console.log(item)
+      item => console.log(item.oldName, " --> ", item.newName)
+    );
     return;
   } catch (error) {
     console.error(error);

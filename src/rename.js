@@ -54,7 +54,7 @@ function transformExtLongJpeg(item) {
 }
 
 function addVersions(item) {
-  item.date && !item.version && (item.version = 0);
+  item.version || (item.version = "0");
   return item;
 }
 
@@ -67,7 +67,6 @@ function reassemblyFileName(item) {
   } else {
     item.newName = oldName;
   }
-  // console.log("item ", item.newName);
   return item;
 }
 
