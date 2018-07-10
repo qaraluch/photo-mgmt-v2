@@ -1,21 +1,21 @@
-function getDate({ passDate = undefined } = {}) {
-  const choosenDate = passDate ? new Date(passDate) : new Date();
-  return (
-    choosenDate
-      .toISOString()
-      // modifies format of new Date '2012-11-04T14:51:06.157Z'
-      .replace(/T/, "_")
-      .replace(/:/g, "")
-      .replace(/\..+/, "")
+function getDate(passedDate) {
+  const currentDate = new Date();
+  const currentDateMs = currentDate.getTime();
+  const passedDateValue = new Date(passedDate).getTime();
+  const timeZoneOffsetMs = currentDate.getTimezoneOffset() * 60 * 1000;
+  const theDate = new Date(
+    (passedDateValue || currentDateMs) - timeZoneOffsetMs
   );
+  return theDate.toISOString();
 }
-
-function getTimeStamp() {
-  return getDate();
-}
+const getFileTimeStamp = passDateValue =>
+  getDate(passDateValue)
+    .replace(/T/, "_")
+    .replace(/:/g, "")
+    .replace(/\..+/, "");
 
 function parseStatsDate(dateStr) {
-  return getDate({ passDate: dateStr });
+  return getDate(dateStr);
 }
 
 //ES9 / node.js ^10.3.0
@@ -32,7 +32,7 @@ function parseExistedFileName(item) {
 }
 
 module.exports = {
-  getTimeStamp,
+  getFileTimeStamp,
   regexFileName,
   parseExistedFileName,
   parseStatsDate
