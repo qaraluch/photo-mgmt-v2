@@ -78,7 +78,11 @@ function getMetaData(item) {
 function reassemblyFileName(item) {
   const { oldName, date, version = "", comment, newExt } = item;
   const commentWithHyphen =
-    typeof comment === "undefined" || "null" ? "" : ` - ${comment}`;
+    typeof comment === "undefined"
+      ? ""
+      : typeof comment === "object"
+        ? ""
+        : ` - ${comment}`;
   if (date) {
     item.newName = `${date}-${version}${commentWithHyphen}${newExt}`;
   } else {
