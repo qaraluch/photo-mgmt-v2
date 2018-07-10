@@ -8,15 +8,18 @@ function getDate(passedDate) {
   );
   return theDate.toISOString();
 }
+
 const getFileTimeStamp = passDateValue =>
   getDate(passDateValue)
     .replace(/T/, "_")
     .replace(/:/g, "")
     .replace(/\..+/, "");
 
-function parseStatsDate(dateStr) {
-  return getDate(dateStr);
-}
+const getDateFromMetadata = passDateValue =>
+  getDate(passDateValue)
+    .replace(/T/, " ")
+    .replace(/\..+/, "")
+    .replace(/:/g, ".");
 
 //ES9 / node.js ^10.3.0
 const regexFileName = /(?<date>\d{4}-\d{2}-\d{2}\s\d{2}\.\d{2}\.\d{2})(-)?(?<version>\d)?(\s)?([-|—])?(\s)?(?<comment>.+)?/;
@@ -35,5 +38,5 @@ module.exports = {
   getFileTimeStamp,
   regexFileName,
   parseExistedFileName,
-  parseStatsDate
+  getDateFromMetadata
 };

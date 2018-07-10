@@ -2,7 +2,7 @@ const path = require("path");
 const R = require("ramda");
 
 const { getExifData } = require("./exif.js");
-const { parseExistedFileName } = require("./utils.js");
+const { parseExistedFileName, getDateFromMetadata } = require("./utils.js");
 
 const getExt = fileName => path.parse(fileName).ext;
 const getName = fileName => path.parse(fileName).name;
@@ -15,6 +15,7 @@ async function doRenameFiles(walkOutput) {
     R.map(transformExtToLowerCase),
     R.map(transformExtLongJpeg),
     R.map(addVersions),
+    R.map(getMetaData),
     R.map(reassemblyFileName)
   );
   const transducer = R.into([], xform);
@@ -58,10 +59,26 @@ function addVersions(item) {
   return item;
 }
 
+function getMetaData(item) {
+  const { date, newExt } = item;
+  if (!date) {
+    if (newExt === ".jpg") {
+      item.date = getDateFromMetadata(item.exif.DateTimeOriginal);
+    } else if (newExt === ".mp4") {
+      item.date = getDateFromMetadata(item.exif.TrackCreateDate);
+    } else if (newExt === ".png") {
+      item.date = getDateFromMetadata(item.stats.ctime);
+    } else if (newExt === ".gif") {
+      item.date = getDateFromMetadata(item.stats.ctime);
+    }
+  }
+  return item;
+}
+
 function reassemblyFileName(item) {
   const { oldName, date, version = "", comment, newExt } = item;
   const commentWithHyphen =
-    typeof comment === "undefined" ? "" : ` - ${comment}`;
+    typeof comment === "undefined" || "null" ? "" : ` - ${comment}`;
   if (date) {
     item.newName = `${date}-${version}${commentWithHyphen}${newExt}`;
   } else {

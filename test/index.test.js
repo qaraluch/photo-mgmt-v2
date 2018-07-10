@@ -73,3 +73,15 @@ test("rename - do not rename when no date in the file name", t => {
   const expected = true;
   t.is(actual, expected, msg);
 });
+
+test("rename - after exif / stats", t => {
+  const msg =
+    "should rename files after exif or stats info when no date in the filename";
+  const onlyFilesWithNoDate = renamedFiles.filter(
+    item => (item.date ? false : true)
+  );
+  const check = R.map(item => (item.date ? true : false), onlyFilesWithNoDate);
+  const actual = R.all(Boolean, check);
+  const expected = true;
+  t.is(actual, expected, msg);
+});
