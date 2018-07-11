@@ -1,14 +1,42 @@
-function getTimeStamp() {
-  return (
-    new Date()
-      .toISOString()
-      // modifies format of new Date '2012-11-04T14:51:06.157Z'
-      .replace(/T/, "_")
-      .replace(/:/g, "")
-      .replace(/\..+/, "")
+function getDate(passedDate) {
+  const currentDate = new Date();
+  const currentDateMs = currentDate.getTime();
+  const passedDateValue = new Date(passedDate).getTime();
+  const timeZoneOffsetMs = currentDate.getTimezoneOffset() * 60 * 1000;
+  const theDate = new Date(
+    (passedDateValue || currentDateMs) - timeZoneOffsetMs
   );
+  return theDate.toISOString();
+}
+
+const getFileTimeStamp = passDateValue =>
+  getDate(passDateValue)
+    .replace(/T/, "_")
+    .replace(/:/g, "")
+    .replace(/\..+/, "");
+
+const getDateFromMetadata = passDateValue =>
+  getDate(passDateValue)
+    .replace(/T/, " ")
+    .replace(/\..+/, "")
+    .replace(/:/g, ".");
+
+//ES9 / node.js ^10.3.0
+const regexFileName = /(?<date>\d{4}-\d{2}-\d{2}\s\d{2}\.\d{2}\.\d{2})(-)?(?<version>\d)?(\s)?([-|—])?(\s)?(?<comment>.+)?/;
+
+function parseExistedFileName(baseName) {
+  const match = regexFileName.exec(baseName);
+  const date = match && match.groups.date;
+  const version = match && match.groups.version;
+  const commentRaw = match && match.groups.comment;
+  const comment = commentRaw && commentRaw.trim();
+  const resultObj = { date, version, comment };
+  return resultObj;
 }
 
 module.exports = {
-  getTimeStamp
+  getFileTimeStamp,
+  regexFileName,
+  parseExistedFileName,
+  getDateFromMetadata
 };

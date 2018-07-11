@@ -10,7 +10,7 @@ async function runTaskPresort(args) {
     await makeDir(cuSort);
     listReadFiles(walkOutput);
     console.log("About to rename files...");
-    const renamedFiles = doRenameFiles(walkOutput);
+    const renamedFiles = await doRenameFiles(walkOutput);
     renamedFiles.forEach(
       // item => console.log(item)
       item => console.log(item.oldName, " --> ", item.newName)

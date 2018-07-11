@@ -4,7 +4,7 @@ const cleanNodeModules = rimraf("node_modules");
 
 module.exports = {
   scripts: {
-    default: "node src/index.js",
+    default: "nps test.resetFixtures && node src/index.js",
     clear: {
       default: {
         description: "Deletes the `node_modules` directory",
