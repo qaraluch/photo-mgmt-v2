@@ -9,7 +9,7 @@ const getName = fileName => path.parse(fileName).name;
 
 async function doRenameFiles(walkOutput) {
   const infoToRename = pullInfoFromWalk(walkOutput);
-  const infoFromFileName = R.map(parseExistedFileName, infoToRename);
+  const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
   const infoWithExif = await getExifData(infoFromFileName);
   const xform = R.compose(
     R.map(transformExtToLowerCase),
@@ -40,6 +40,13 @@ function pullInfoFromWalk(walkOutput) {
     }))
   ];
   return copyInfo;
+}
+
+function getInfoFromFileNameMapper(item) {
+  const { oldBaseName } = item;
+  const info = parseExistedFileName(oldBaseName);
+  const itemChanged = { ...item, ...info };
+  return itemChanged;
 }
 
 function transformExtToLowerCase(item) {
