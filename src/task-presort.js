@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const makeDir = require("make-dir");
 
 const { getAllFiles } = require("./walker.js");
