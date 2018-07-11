@@ -2,7 +2,11 @@ const path = require("path");
 const R = require("ramda");
 
 const { getExifData } = require("./exif.js");
-const { parseExistedFileName, getDateFromMetadata } = require("./utils.js");
+const {
+  parseExistedFileName,
+  getDateFromMetadata,
+  correctExifDate
+} = require("./utils.js");
 
 const getExt = fileName => path.parse(fileName).ext;
 const getName = fileName => path.parse(fileName).name;
@@ -68,15 +72,21 @@ function addVersions(item) {
 
 function getMetaData(item) {
   const { date, newExt } = item;
+
   if (!date) {
     if (newExt === ".jpg") {
-      item.date = getDateFromMetadata(item.exif.DateTimeOriginal);
+      item.date = getDateFromMetadata(
+        item.exif.DateTimeOriginal &&
+          correctExifDate(item.exif.DateTimeOriginal)
+      );
     } else if (newExt === ".mp4") {
-      item.date = getDateFromMetadata(item.exif.TrackCreateDate);
+      item.date = getDateFromMetadata(
+        item.exif.TrackCreateDate && correctExifDate(item.exif.TrackCreateDate)
+      );
     } else if (newExt === ".png") {
-      item.date = getDateFromMetadata(item.stats.ctime);
+      item.date = getDateFromMetadata(item.stats.ctime.toString());
     } else if (newExt === ".gif") {
-      item.date = getDateFromMetadata(item.stats.ctime);
+      item.date = getDateFromMetadata(item.stats.ctime.toString());
     }
   }
   return item;

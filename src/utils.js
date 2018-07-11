@@ -21,6 +21,9 @@ const getDateFromMetadata = passDateValue =>
     .replace(/\..+/, "")
     .replace(/:/g, ".");
 
+const correctExifDate = dateStr =>
+  dateStr.replace(/^(\d{4}):(\d{2}):(\d{2})(.+)/, "$1-$2-$3$4");
+
 //ES9 / node.js ^10.3.0
 const regexFileName = /(?<date>\d{4}-\d{2}-\d{2}\s\d{2}\.\d{2}\.\d{2})(-)?(?<version>\d)?(\s)?([-|—])?(\s)?(?<comment>.+)?/;
 
@@ -38,5 +41,6 @@ module.exports = {
   getFileTimeStamp,
   regexFileName,
   parseExistedFileName,
-  getDateFromMetadata
+  getDateFromMetadata,
+  correctExifDate
 };
