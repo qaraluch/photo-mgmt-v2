@@ -39,9 +39,15 @@ const commandPresort = {
   config: "configTest"
 };
 
+const commandPresortReal = {
+  command: "presort",
+  config: "configCU"
+};
+
 // runThis(commandBackup);
 // runThis(commandBackupReal);
 runThis(commandPresort);
+// runThis(commandPresortReal);
 
 //index.js
 async function runThis(taskCommand) {
