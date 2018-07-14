@@ -23,7 +23,8 @@ async function doRenameFiles(walkOutput) {
     R.map(reassemblyFileName)
   );
   const transducer = R.into([], xform);
-  const renamedFiles = transducer(infoWithExif);
+  const infoRenamedWithDups = transducer(infoWithExif);
+  const renamedFiles = bumpVersionOfDups(infoRenamedWithDups);
   return renamedFiles;
 }
 
@@ -72,7 +73,6 @@ function addVersions(item) {
 
 function getMetaData(item) {
   const { date, newExt } = item;
-
   if (!date) {
     if (newExt === ".jpg") {
       item.date = getDateFromMetadata(
@@ -92,16 +92,49 @@ function getMetaData(item) {
   return item;
 }
 
-function reassemblyFileName(item) {
-  const { oldName, date, version = "", comment, newExt } = item;
+const bumpVersionReducer = (acc, next) => {
+  function checkUniqueness(acc, next) {
+    const nextName = putTogetherFileName(next);
+    const accNames = acc.map(itm => itm.newName);
+    const isUnique = !accNames.includes(nextName);
+    if (isUnique) {
+      return next.version;
+    } else {
+      const nextToModify = { ...next };
+      const bumpedVer = parseInt(next.version) + 1;
+      nextToModify.version = bumpedVer;
+      return checkUniqueness(acc, nextToModify);
+    }
+  }
+  const uniqueVersion = checkUniqueness(acc, next);
+  const modifiedItem = next;
+  modifiedItem.version = uniqueVersion;
+  modifiedItem.newName = putTogetherFileName(modifiedItem);
+  acc.push(modifiedItem);
+  return acc;
+};
+
+function bumpVersionOfDups(info) {
+  const dupsBumped = R.reduce(bumpVersionReducer, [], info);
+  return dupsBumped;
+}
+
+function putTogetherFileName(item) {
+  const { date, version = "", comment, newExt } = item;
   const commentWithHyphen =
     typeof comment === "undefined"
       ? ""
       : typeof comment === "object"
         ? ""
         : ` - ${comment}`;
+  const newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+  return newName;
+}
+
+function reassemblyFileName(item) {
+  const { oldName, date } = item;
   if (date) {
-    item.newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+    item.newName = putTogetherFileName(item);
   } else {
     item.newName = oldName;
   }

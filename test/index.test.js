@@ -17,6 +17,7 @@ const getPropertyOfCurried = R.curry(getPropertyOf);
 
 const getNewExtensions = getPropertyOfCurried("newExt");
 const getVersion = getPropertyOfCurried("version");
+const getNewName = getPropertyOfCurried("newName");
 
 test.before(async () => {
   walkOutput = await getAllFiles(cu);
@@ -83,5 +84,19 @@ test("rename - after exif / stats", t => {
   const check = R.map(item => (item.date ? true : false), onlyFilesWithNoDate);
   const actual = R.all(Boolean, check);
   const expected = true;
+  t.is(actual, expected, msg);
+});
+
+test("rename - no duplicate renamed names", t => {
+  const msg = "should return all unique new names";
+  const newNames = getNewName(renamedFiles);
+  // console.log("newNames ", newNames);
+  const findUnique = (acc, next) => {
+    acc.includes(next) || acc.push(next);
+    return acc;
+  };
+  const uniques = R.reduce(findUnique, [], newNames);
+  const actual = newNames.length;
+  const expected = uniques.length;
   t.is(actual, expected, msg);
 });
