@@ -5,6 +5,9 @@ const cleanNodeModules = rimraf("node_modules");
 module.exports = {
   scripts: {
     default: "node src/index.js",
+    run: {
+      script: "nps test.resetFixtures && node src/index.js"
+    },
     clear: {
       default: {
         description: "Deletes the `node_modules` directory",
@@ -19,7 +22,7 @@ module.exports = {
       resetFixtures: {
         description: "reset photos/film fixtures",
         script:
-          "rm -rf ./test/fixtures/cu ./test/fixtures/cu-backup && cp -rf ./test/fixtures/cu-org/ ./test/fixtures/cu"
+          "rm -rf ./test/fixtures/cu ./test/fixtures/cu-backup ./test/fixtures/cu-sort && cp -rf ./test/fixtures/cu-org/ ./test/fixtures/cu"
       }
     }
   },

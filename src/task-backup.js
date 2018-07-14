@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 const path = require("path");
 const makeDir = require("make-dir");
 
-const { getTimeStamp } = require("./utils.js");
+const { getFileTimeStamp } = require("./utils.js");
 const { getAllFiles } = require("./walker.js");
 const { archiveIt, spawnCheckArchive } = require("./archiver.js");
 
@@ -47,7 +48,7 @@ function copyPathsForBackup(walkOutput) {
 }
 
 function constructBackupFileName() {
-  const fileName = `cu-temp-arch-${getTimeStamp()}.zip`;
+  const fileName = `cu-temp-arch-${getFileTimeStamp()}.zip`;
   return fileName;
 }
 
