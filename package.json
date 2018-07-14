@@ -21,13 +21,13 @@
     "src/index.js"
   ],
   "devDependencies": {
-    "eslint": "5.0.1",
+    "eslint": "5.1.0",
     "ava": "0.25.0",
     "eslint-config-prettier": "2.9.0",
     "eslint-plugin-import": "2.13.0",
-    "eslint-plugin-prettier": "2.6.1",
+    "eslint-plugin-prettier": "2.6.2",
     "nps-utils": "1.6.0",
-    "prettier": "1.13.6"
+    "prettier": "1.13.7"
   },
   "dependencies": {
     "archiver": "2.1.1",

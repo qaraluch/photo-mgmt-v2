@@ -2,7 +2,11 @@ const path = require("path");
 const R = require("ramda");
 
 const { getExifData } = require("./exif.js");
-const { parseExistedFileName, getDateFromMetadata } = require("./utils.js");
+const {
+  parseExistedFileName,
+  getDateFromMetadata,
+  correctExifDate
+} = require("./utils.js");
 
 const getExt = fileName => path.parse(fileName).ext;
 const getName = fileName => path.parse(fileName).name;
@@ -19,7 +23,8 @@ async function doRenameFiles(walkOutput) {
     R.map(reassemblyFileName)
   );
   const transducer = R.into([], xform);
-  const renamedFiles = transducer(infoWithExif);
+  const infoRenamedWithDups = transducer(infoWithExif);
+  const renamedFiles = bumpVersionOfDups(infoRenamedWithDups);
   return renamedFiles;
 }
 
@@ -70,28 +75,66 @@ function getMetaData(item) {
   const { date, newExt } = item;
   if (!date) {
     if (newExt === ".jpg") {
-      item.date = getDateFromMetadata(item.exif.DateTimeOriginal);
+      item.date = getDateFromMetadata(
+        item.exif.DateTimeOriginal &&
+          correctExifDate(item.exif.DateTimeOriginal)
+      );
     } else if (newExt === ".mp4") {
-      item.date = getDateFromMetadata(item.exif.TrackCreateDate);
+      item.date = getDateFromMetadata(
+        item.exif.TrackCreateDate && correctExifDate(item.exif.TrackCreateDate)
+      );
     } else if (newExt === ".png") {
-      item.date = getDateFromMetadata(item.stats.ctime);
+      item.date = getDateFromMetadata(item.stats.ctime.toString());
     } else if (newExt === ".gif") {
-      item.date = getDateFromMetadata(item.stats.ctime);
+      item.date = getDateFromMetadata(item.stats.ctime.toString());
     }
   }
   return item;
 }
 
-function reassemblyFileName(item) {
-  const { oldName, date, version = "", comment, newExt } = item;
+const bumpVersionReducer = (acc, next) => {
+  function checkUniqueness(acc, next) {
+    const nextName = putTogetherFileName(next);
+    const accNames = acc.map(itm => itm.newName);
+    const isUnique = !accNames.includes(nextName);
+    if (isUnique) {
+      return next.version;
+    } else {
+      const nextToModify = { ...next };
+      const bumpedVer = parseInt(next.version) + 1;
+      nextToModify.version = bumpedVer;
+      return checkUniqueness(acc, nextToModify);
+    }
+  }
+  const uniqueVersion = checkUniqueness(acc, next);
+  const modifiedItem = next;
+  modifiedItem.version = uniqueVersion;
+  modifiedItem.newName = putTogetherFileName(modifiedItem);
+  acc.push(modifiedItem);
+  return acc;
+};
+
+function bumpVersionOfDups(info) {
+  const dupsBumped = R.reduce(bumpVersionReducer, [], info);
+  return dupsBumped;
+}
+
+function putTogetherFileName(item) {
+  const { date, version = "", comment, newExt } = item;
   const commentWithHyphen =
     typeof comment === "undefined"
       ? ""
       : typeof comment === "object"
         ? ""
         : ` - ${comment}`;
+  const newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+  return newName;
+}
+
+function reassemblyFileName(item) {
+  const { oldName, date } = item;
   if (date) {
-    item.newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+    item.newName = putTogetherFileName(item);
   } else {
     item.newName = oldName;
   }
