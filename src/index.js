@@ -13,6 +13,15 @@ const configTest = {
   cuSort: "./test/fixtures/cu-sort/"
 };
 
+const configTestRename = {
+  // Source dir Camera Upload from Dropbox
+  cu: "./test/fixtures/cu/",
+  // backup folder for CU
+  cuBackup: "./test/fixtures/cu-backup/",
+  // Destination Dir for cu-presort
+  cuSort: "./test/fixtures/cu-sort-rename/"
+};
+
 const configCU = {
   // Source dir Camera Upload from Dropbox
   cu: "/mnt/g/Dropbox/Camera Uploads/",
@@ -47,7 +56,7 @@ const commandPresortReal = {
 
 const commandRename = {
   command: "rename",
-  config: "configTest"
+  config: "configTestRename"
 };
 
 // runThis(commandBackup);
@@ -79,8 +88,10 @@ function chooseConfig(configName) {
   const chosen =
     configName === "configTest"
       ? configTest
-      : configName === "configCU"
-        ? configCU
-        : configTest;
+      : configName === "configTestRename"
+        ? configTestRename
+        : configName === "configCU"
+          ? configCU
+          : configTest;
   return chosen;
 }

@@ -8,9 +8,9 @@ const { getAllFiles } = require("./walker.js");
 async function runTaskRename(args) {
   try {
     const { cu, cuSort } = args;
-    // const walkOutput = await getAllFiles(cu);
+    const walkOutput = await getAllFiles(cuSort);
     // await makeDir(cuSort);
-    // listReadFiles(walkOutput);
+    listReadFiles(walkOutput);
     console.log("\n About to rename files...");
     // const renamedFiles = await doRenameFiles(walkOutput);
     // renamedFiles.forEach(

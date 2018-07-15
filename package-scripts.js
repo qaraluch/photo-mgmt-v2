@@ -23,6 +23,11 @@ module.exports = {
         description: "reset photos/film fixtures",
         script:
           "rm -rf ./test/fixtures/cu ./test/fixtures/cu-backup ./test/fixtures/cu-sort && cp -rf ./test/fixtures/cu-org/ ./test/fixtures/cu"
+      },
+      resetFixturesRename: {
+        description: "reset photos/film fixtures for rename task",
+        script:
+          "rm -rf ./test/fixtures/cu-sort-rename && cp -rf ./test/fixtures/cu-org/ ./test/fixtures/cu-sort-rename"
       }
     }
   },
