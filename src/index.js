@@ -1,6 +1,7 @@
 //task dependencies
 const execTaskBackup = require("./task-backup.js");
 const execTaskPresort = require("./task-presort.js");
+const execTaskRename = require("./task-rename.js");
 
 //configs:
 const configTest = {
@@ -44,10 +45,16 @@ const commandPresortReal = {
   config: "configCU"
 };
 
+const commandRename = {
+  command: "rename",
+  config: "configTest"
+};
+
 // runThis(commandBackup);
 // runThis(commandBackupReal);
-runThis(commandPresort);
+// runThis(commandPresort);
 // runThis(commandPresortReal);
+runThis(commandRename);
 
 //index.js
 async function runThis(taskCommand) {
@@ -62,7 +69,9 @@ async function runThis(taskCommand) {
       ? await execTaskBackup(argsTaskCommand)
       : command === "presort"
         ? await execTaskPresort(argsTaskCommand)
-        : console.log(`Not found this '${command}'!`);
+        : command === "rename"
+          ? await execTaskRename(argsTaskCommand)
+          : console.log(`Not found this '${command}'!`);
   console.log("DONE!");
 }
 
