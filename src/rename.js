@@ -11,7 +11,7 @@ const {
 const getExt = fileName => path.parse(fileName).ext;
 const getName = fileName => path.parse(fileName).name;
 
-async function doRenameFiles(walkOutput) {
+async function doRenameFilesForPresort(walkOutput) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
   const infoWithExif = await getExifData(infoFromFileName);
@@ -142,5 +142,5 @@ function reassemblyFileName(item) {
 }
 
 module.exports = {
-  doRenameFiles
+  doRenameFilesForPresort
 };

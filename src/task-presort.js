@@ -2,7 +2,7 @@
 const makeDir = require("make-dir");
 
 const { getAllFiles } = require("./walker.js");
-const { doRenameFiles } = require("./rename.js");
+const { doRenameFilesForPresort } = require("./rename.js");
 const { moveFilesTo } = require("./move-files.js");
 
 async function runTaskPresort(args) {
@@ -12,7 +12,7 @@ async function runTaskPresort(args) {
     await makeDir(cuSort);
     listReadFiles(walkOutput);
     console.log("\n About to rename files...");
-    const renamedFiles = await doRenameFiles(walkOutput);
+    const renamedFiles = await doRenameFilesForPresort(walkOutput);
     renamedFiles.forEach(
       // item => console.log(item)
       item => console.log(item.oldName, " --> ", item.newName)

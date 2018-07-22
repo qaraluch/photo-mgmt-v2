@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 //task dependencies
 const execTaskBackup = require("./task-backup.js");
 const execTaskPresort = require("./task-presort.js");
@@ -27,7 +28,7 @@ const configCU = {
   cu: "/mnt/g/Dropbox/Camera Uploads/",
   // backup folder for CU
   cuBackup: "/mnt/g/.temp/cuBackup/",
-  // Detination Dir for cu-presort
+  // Destination Dir for cu-presort
   cuSort: "/mnt/g/Dropbox/mydrocsort/"
 };
 

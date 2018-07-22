@@ -2,7 +2,7 @@ const test = require("ava");
 const path = require("path");
 const R = require("ramda");
 
-const { doRenameFiles } = require("../src/rename.js");
+const { doRenameFilesForPresort } = require("../src/rename.js");
 const { getAllFiles } = require("../src/walker.js");
 
 const cwd = process.cwd();
@@ -21,17 +21,17 @@ const getNewName = getPropertyOfCurried("newName");
 
 test.before(async () => {
   walkOutput = await getAllFiles(cu);
-  renamedFiles = await doRenameFiles(walkOutput);
+  renamedFiles = await doRenameFilesForPresort(walkOutput);
 });
 
-test("rename - is function", t => {
+test("rename for presort - is function", t => {
   const msg = "should be a function";
-  const actual = typeof doRenameFiles === "function";
+  const actual = typeof doRenameFilesForPresort === "function";
   const expected = true;
   t.is(actual, expected, msg);
 });
 
-test("rename - extension to lower case", t => {
+test("rename for presort - extension to lower case", t => {
   const msg = "should return all extension as lower case letters";
   const newExt = getNewExtensions(renamedFiles);
   const check = R.map(item => item === item.toLowerCase(), newExt);
@@ -40,7 +40,7 @@ test("rename - extension to lower case", t => {
   t.is(actual, expected, msg);
 });
 
-test("rename - transform long jpeg extension to short", t => {
+test("rename for presort - transform long jpeg extension to short", t => {
   const msg = "should return all .jpeg extension as .jpg";
   const onlyJpegs = renamedFiles.filter(
     item => path.parse(item.oldName).ext === ".jpeg"
@@ -52,7 +52,7 @@ test("rename - transform long jpeg extension to short", t => {
   t.is(actual, expected, msg);
 });
 
-test("rename - get versions", t => {
+test("rename for presort - get versions", t => {
   const msg = "should return all new names with version number";
   const versions = getVersion(renamedFiles);
   const check = R.map(item => item && true, versions);
@@ -61,7 +61,7 @@ test("rename - get versions", t => {
   t.is(actual, expected, msg);
 });
 
-test("rename - do not rename when no date in the file name", t => {
+test("rename for presort - do not rename when no date in the file name", t => {
   const msg = "should return only files with parsable date";
   const onlyFilesWithNoDate = renamedFiles.filter(
     item => (item.date ? false : true)
@@ -75,7 +75,7 @@ test("rename - do not rename when no date in the file name", t => {
   t.is(actual, expected, msg);
 });
 
-test("rename - after exif / stats", t => {
+test("rename for presort - after exif / stats", t => {
   const msg =
     "should rename files after exif or stats info when no date in the filename";
   const onlyFilesWithNoDate = renamedFiles.filter(
@@ -87,7 +87,7 @@ test("rename - after exif / stats", t => {
   t.is(actual, expected, msg);
 });
 
-test("rename - no duplicate renamed names", t => {
+test("rename for presort - no duplicate renamed names", t => {
   const msg = "should return all unique new names";
   const newNames = getNewName(renamedFiles);
   // console.log("newNames ", newNames);
