@@ -11,7 +11,7 @@ const {
 const getExt = fileName => path.parse(fileName).ext;
 const getName = fileName => path.parse(fileName).name;
 
-async function doRenameFiles(walkOutput) {
+async function doRenameFilesForPresort(walkOutput) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
   const infoWithExif = await getExifData(infoFromFileName);
@@ -120,27 +120,53 @@ function bumpVersionOfDups(info) {
 }
 
 function putTogetherFileName(item) {
-  const { date, version = "", comment, newExt } = item;
+  const { date, version = "", tag, comment, newExt } = item;
+  const tagWithHyphen = typeof tag === "undefined" ? "" : ` - ${tag}`;
   const commentWithHyphen =
     typeof comment === "undefined"
       ? ""
       : typeof comment === "object"
         ? ""
         : ` - ${comment}`;
-  const newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+  const newName = `${date}-${version}${tagWithHyphen}${commentWithHyphen}${newExt}`;
   return newName;
 }
 
 function reassemblyFileName(item) {
-  const { oldName, date } = item;
+  const { oldName, date, tag } = item;
   if (date) {
     item.newName = putTogetherFileName(item);
   } else {
-    item.newName = oldName;
+    if (item.tag) {
+      item.newName = `${tag} - ${oldName}`;
+    } else {
+      item.newName = oldName;
+    }
   }
   return item;
 }
 
+function addTag(walkOutput, tag) {
+  const infoToRename = pullInfoFromWalk(walkOutput);
+  const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
+  const xform = R.compose(
+    R.map(addTagToInfoObj(tag)),
+    R.map(transformExtToLowerCase),
+    R.map(transformExtLongJpeg),
+    R.map(addVersions),
+    R.map(reassemblyFileName)
+  );
+  const transducer = R.into([], xform);
+  const renamedFiles = transducer(infoFromFileName);
+  return renamedFiles;
+}
+
+const addTagToInfoObj = tag => item => {
+  item.tag = tag;
+  return item;
+};
+
 module.exports = {
-  doRenameFiles
+  doRenameFilesForPresort,
+  addTag
 };
