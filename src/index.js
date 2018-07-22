@@ -57,7 +57,8 @@ const commandPresortReal = {
 
 const commandRename = {
   command: "rename",
-  config: "configTestRename"
+  config: "configTestRename",
+  tag: "myTag"
 };
 
 // runThis(commandBackup);

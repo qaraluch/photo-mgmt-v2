@@ -5,12 +5,12 @@ const { renameTag } = require("./rename.js");
 
 async function runTaskRename(args) {
   try {
-    const { cuSort } = args;
+    const { cuSort, tag } = args;
     const walkOutput = await getAllFiles(cuSort);
     //TODO: check if cuSort exists
     listReadFiles(walkOutput);
     console.log("\n About to rename files...");
-    const renamedFiles = await renameTag(walkOutput);
+    const renamedFiles = await renameTag(walkOutput, tag);
     renamedFiles.forEach(
       // item => console.log(item)
       item => console.log(item.oldName, " --> ", item.newName)
