@@ -1,24 +1,21 @@
 /* eslint-disable no-console */
-// const makeDir = require("make-dir");
 
 const { getAllFiles } = require("./walker.js");
-// const { doRenameFiles } = require("./rename.js");
-// const { moveFilesTo } = require("./move-files.js");
+const { renameTag } = require("./rename.js");
 
 async function runTaskRename(args) {
   try {
-    const { cu, cuSort } = args;
+    const { cuSort } = args;
     const walkOutput = await getAllFiles(cuSort);
-    // await makeDir(cuSort);
+    //TODO: check if cuSort exists
     listReadFiles(walkOutput);
     console.log("\n About to rename files...");
-    // const renamedFiles = await doRenameFiles(walkOutput);
-    // renamedFiles.forEach(
-    //   // item => console.log(item)
-    //   item => console.log(item.oldName, " --> ", item.newName)
-    // );
-    // console.log("\n Moving files ...");
-    // await moveFilesTo(renamedFiles, cuSort);
+    const renamedFiles = await renameTag(walkOutput);
+    renamedFiles.forEach(
+      // item => console.log(item)
+      item => console.log(item.oldName, " --> ", item.newName)
+    );
+    //TODO: implement rename module
     return;
   } catch (error) {
     console.error(error);

@@ -141,6 +141,25 @@ function reassemblyFileName(item) {
   return item;
 }
 
+async function renameTag(walkOutput) {
+  const infoToRename = pullInfoFromWalk(walkOutput);
+  const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
+  infoFromFileName.forEach(
+    // item => console.log(item)
+    item => {
+      console.log("  -->", item.oldBaseName);
+      console.log("  -->", item.date);
+      console.log("  -->", item.comment);
+      console.log("  -->", item.tag);
+    }
+  );
+  const xform = R.compose(R.map(reassemblyFileName));
+  const transducer = R.into([], xform);
+  const renamedFiles = transducer(infoFromFileName);
+  return renamedFiles;
+}
+
 module.exports = {
-  doRenameFilesForPresort
+  doRenameFilesForPresort,
+  renameTag
 };
