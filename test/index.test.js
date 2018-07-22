@@ -2,7 +2,7 @@ const test = require("ava");
 const path = require("path");
 const R = require("ramda");
 
-const { doRenameFilesForPresort, renameTag } = require("../src/rename.js");
+const { doRenameFilesForPresort, addTag } = require("../src/rename.js");
 const { getAllFiles } = require("../src/walker.js");
 
 const cwd = process.cwd();
@@ -26,7 +26,7 @@ const tagForRename = "myTag";
 test.before(async () => {
   walkOutput = await getAllFiles(cu);
   renamedFiles = await doRenameFilesForPresort(walkOutput);
-  renamedFilesForRenameTag = await renameTag(walkOutput, tagForRename);
+  renamedFilesForRenameTag = await addTag(walkOutput, tagForRename);
 });
 
 test("rename for presort - is function", t => {

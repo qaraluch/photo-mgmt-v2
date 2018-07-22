@@ -146,7 +146,7 @@ function reassemblyFileName(item) {
   return item;
 }
 
-function renameTag(walkOutput, tag) {
+function addTag(walkOutput, tag) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
   const xform = R.compose(
@@ -168,5 +168,5 @@ const addTagToInfoObj = tag => item => {
 
 module.exports = {
   doRenameFilesForPresort,
-  renameTag
+  addTag
 };

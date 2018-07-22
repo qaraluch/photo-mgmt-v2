@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 
 const { getAllFiles } = require("./walker.js");
-const { renameTag } = require("./rename.js");
+const { addTag } = require("./rename.js");
+const { renameFiles } = require("./rename-files.js");
 
 async function runTaskRename(args) {
   try {
@@ -10,12 +11,8 @@ async function runTaskRename(args) {
     //TODO: check if cuSort exists
     listReadFiles(walkOutput);
     console.log("\n About to rename files...");
-    const renamedFiles = renameTag(walkOutput, tag);
-    renamedFiles.forEach(
-      // item => console.log(item)
-      item => console.log(item.oldName, " --> ", item.newName)
-    );
-    //TODO: implement rename module
+    const renamedFiles = addTag(walkOutput, tag);
+    await renameFiles(renamedFiles);
     return;
   } catch (error) {
     console.error(error);
