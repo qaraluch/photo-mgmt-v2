@@ -10,7 +10,7 @@ async function runTaskRename(args) {
     //TODO: check if cuSort exists
     listReadFiles(walkOutput);
     console.log("\n About to rename files...");
-    const renamedFiles = await renameTag(walkOutput, tag);
+    const renamedFiles = renameTag(walkOutput, tag);
     renamedFiles.forEach(
       // item => console.log(item)
       item => console.log(item.oldName, " --> ", item.newName)

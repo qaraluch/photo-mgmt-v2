@@ -120,45 +120,44 @@ function bumpVersionOfDups(info) {
 }
 
 function putTogetherFileName(item) {
-  const { date, version = "", comment, newExt } = item;
+  const { date, version = "", tag, comment, newExt } = item;
+  const tagWithHyphen = typeof tag === "undefined" ? "" : ` - ${tag}`;
   const commentWithHyphen =
     typeof comment === "undefined"
       ? ""
       : typeof comment === "object"
         ? ""
         : ` - ${comment}`;
-  const newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+  const newName = `${date}-${version}${tagWithHyphen}${commentWithHyphen}${newExt}`;
   return newName;
 }
 
 function reassemblyFileName(item) {
-  const { oldName, date } = item;
+  const { oldName, date, tag } = item;
   if (date) {
     item.newName = putTogetherFileName(item);
   } else {
-    item.newName = oldName;
+    if (item.tag) {
+      item.newName = `${tag} - ${oldName}`;
+    } else {
+      item.newName = oldName;
+    }
   }
   return item;
 }
 
-async function renameTag(walkOutput, tag) {
+function renameTag(walkOutput, tag) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
   const xform = R.compose(
     R.map(addTagToInfoObj(tag)),
+    R.map(transformExtToLowerCase),
+    R.map(transformExtLongJpeg),
+    R.map(addVersions),
     R.map(reassemblyFileName)
   );
   const transducer = R.into([], xform);
   const renamedFiles = transducer(infoFromFileName);
-  // renamedFiles.forEach(
-  //   // item => console.log(item)
-  //   item => {
-  //     console.log("  -->", item.oldBaseName);
-  //     console.log("  -->", item.date);
-  //     console.log("  -->", item.comment);
-  //     console.log("  -->", item.tag);
-  //   }
-  // );
   return renamedFiles;
 }
 
