@@ -126,3 +126,19 @@ test("rename tag - files without date", t => {
   const expected = renamedName;
   t.is(actual, expected, msg);
 });
+
+test("rename tag after dir - default", t => {
+  const msg = "should rename files that tag is parent dir name";
+  const inputName1 = "no-film-file.mp4";
+  const renamedName1 = "cu-sort-rename - no-film-file.mp4";
+  const [foundItem1] = getItemByOldName(inputName1)(renamedFilesForRenameTag);
+  const actual1 = foundItem1.newName;
+  const expected1 = renamedName1;
+  t.is(actual1, expected1, msg);
+  const inputName2 = "2017-09-19 22.22.22-1 - proper one.jpg";
+  const renamedName2 = "someDir - 2017-09-19 22.22.22-1 - proper one.jpg";
+  const [foundItem2] = getItemByOldName(inputName2)(renamedFilesForRenameTag);
+  const actual2 = foundItem2.newName;
+  const expected2 = renamedName2;
+  t.is(actual2, expected2, msg);
+});
