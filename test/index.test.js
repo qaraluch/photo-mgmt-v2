@@ -7,8 +7,13 @@ const { getAllFiles } = require("../src/walker.js");
 
 const cwd = process.cwd();
 const cu = path.join(cwd, "/test/fixtures/cu");
+const cuSortRename = path.join(cwd, "/test/fixtures/cu-sort-rename");
 
-let walkOutput, renamedFiles, renamedFilesForRenameTag;
+let walkOutput,
+  walkOutputSortRename,
+  renamedFiles,
+  renamedFilesForRenameTag,
+  renamedFilesForRenameTagAfterPD;
 
 const getPropertyOf = (property, collection) =>
   R.map(item => item[property], collection);
@@ -22,11 +27,18 @@ const getItemByOldName = name => results =>
   results.filter(item => item.oldName === name);
 
 const tagForRename = "myTag";
+const renameAfterParentDir = true;
 
 test.before(async () => {
   walkOutput = await getAllFiles(cu);
+  walkOutputSortRename = await getAllFiles(cuSortRename);
   renamedFiles = await doRenameFilesForPresort(walkOutput);
-  renamedFilesForRenameTag = await addTag(walkOutput, tagForRename);
+  renamedFilesForRenameTag = await addTag(walkOutputSortRename, tagForRename);
+  renamedFilesForRenameTagAfterPD = await addTag(
+    walkOutputSortRename,
+    tagForRename,
+    renameAfterParentDir
+  );
 });
 
 test("rename for presort - is function", t => {
@@ -119,8 +131,8 @@ test("rename tag - files with date", t => {
 
 test("rename tag - files without date", t => {
   const msg = "should rename files that tag is placed in the beginning";
-  const inputName = "game-monument-valley.png";
-  const renamedName = `${tagForRename} - game-monument-valley.png`;
+  const inputName = "no-film-file.mp4";
+  const renamedName = `${tagForRename} - no-film-file.mp4`;
   const [foundItem] = getItemByOldName(inputName)(renamedFilesForRenameTag);
   const actual = foundItem.newName;
   const expected = renamedName;
@@ -131,13 +143,17 @@ test("rename tag after dir - default", t => {
   const msg = "should rename files that tag is parent dir name";
   const inputName1 = "no-film-file.mp4";
   const renamedName1 = "cu-sort-rename - no-film-file.mp4";
-  const [foundItem1] = getItemByOldName(inputName1)(renamedFilesForRenameTag);
+  const [foundItem1] = getItemByOldName(inputName1)(
+    renamedFilesForRenameTagAfterPD
+  );
   const actual1 = foundItem1.newName;
   const expected1 = renamedName1;
   t.is(actual1, expected1, msg);
   const inputName2 = "2017-09-19 22.22.22-1 - proper one.jpg";
-  const renamedName2 = "someDir - 2017-09-19 22.22.22-1 - proper one.jpg";
-  const [foundItem2] = getItemByOldName(inputName2)(renamedFilesForRenameTag);
+  const renamedName2 = "2017-09-19 22.22.22-1 - someDir - proper one.jpg";
+  const [foundItem2] = getItemByOldName(inputName2)(
+    renamedFilesForRenameTagAfterPD
+  );
   const actual2 = foundItem2.newName;
   const expected2 = renamedName2;
   t.is(actual2, expected2, msg);

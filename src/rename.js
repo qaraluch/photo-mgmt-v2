@@ -34,6 +34,7 @@ function pullInfoFromWalk(walkOutput) {
       path: item.path,
       stats: item.stats,
       oldName: item.name,
+      parent: item.parent,
       oldBaseName: getName(item.name),
       newExt: getExt(item.name),
       date: undefined,
@@ -146,11 +147,11 @@ function reassemblyFileName(item) {
   return item;
 }
 
-function addTag(walkOutput, tag) {
+function addTag(walkOutput, tag, renameAfterParentDir) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
   const xform = R.compose(
-    R.map(addTagToInfoObj(tag)),
+    R.map(renameAfterParentDir ? addParentDirAsTag : addTagToInfoObj(tag)),
     R.map(transformExtToLowerCase),
     R.map(transformExtLongJpeg),
     R.map(addVersions),
@@ -163,6 +164,11 @@ function addTag(walkOutput, tag) {
 
 const addTagToInfoObj = tag => item => {
   item.tag = tag;
+  return item;
+};
+
+const addParentDirAsTag = item => {
+  item.tag = item.parent;
   return item;
 };
 
