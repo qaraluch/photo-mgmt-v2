@@ -61,11 +61,18 @@ const commandRename = {
   tag: "myTag"
 };
 
+const commandRenameAfterParentDir = {
+  command: "rename",
+  config: "configTestRename",
+  renameAfterParentDir: true
+};
+
 // runThis(commandBackup);
 // runThis(commandBackupReal);
 // runThis(commandPresort);
 // runThis(commandPresortReal);
-runThis(commandRename);
+// runThis(commandRename);
+runThis(commandRenameAfterParentDir);
 
 //index.js
 async function runThis(taskCommand) {
