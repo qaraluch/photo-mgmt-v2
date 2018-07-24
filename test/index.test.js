@@ -158,3 +158,34 @@ test("rename tag after dir - default", t => {
   const expected2 = renamedName2;
   t.is(actual2, expected2, msg);
 });
+
+test("rename tag after dir - only once", t => {
+  const msg = "should rename files that tag is parent dir name only once";
+  const inputName1 = "2017-09-19 11.11.11-1 - extraInfo - proper one.jpg";
+  const renamedName1 =
+    "2017-09-19 11.11.11-1 - someDir - extraInfo - proper one.jpg";
+  const [foundItem1] = getItemByOldName(inputName1)(
+    renamedFilesForRenameTagAfterPD
+  );
+  const actual1 = foundItem1.newName;
+  const expected1 = renamedName1;
+  t.is(actual1, expected1, msg);
+  const inputName2 = "2017-09-19 11.11.11-2 - someDir - proper one.jpg";
+  const renamedName2 = "2017-09-19 11.11.11-2 - someDir - proper one.jpg";
+  const [foundItem2] = getItemByOldName(inputName2)(
+    renamedFilesForRenameTagAfterPD
+  );
+  const actual2 = foundItem2.newName;
+  const expected2 = renamedName2;
+  t.is(actual2, expected2, msg);
+  const inputName3 =
+    "2017-09-19 11.11.11-3 - someDir - extraInfo - proper one.jpg";
+  const renamedName3 =
+    "2017-09-19 11.11.11-3 - someDir - extraInfo - proper one.jpg";
+  const [foundItem3] = getItemByOldName(inputName3)(
+    renamedFilesForRenameTagAfterPD
+  );
+  const actual3 = foundItem3.newName;
+  const expected3 = renamedName3;
+  t.is(actual3, expected3, msg);
+});
