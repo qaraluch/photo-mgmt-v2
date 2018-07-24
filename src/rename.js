@@ -1,5 +1,6 @@
 const path = require("path");
 const R = require("ramda");
+const splitByHyphen = require("qm-txt-splitbyhyphen");
 
 const { getExifData } = require("./exif.js");
 const {
@@ -123,7 +124,6 @@ function bumpVersionOfDups(info) {
 function putTogetherFileName(item) {
   const { date, version = "", tag, comment, newExt } = item;
   const ifCommentHasTag = checkIfCommentHasTag(comment, tag);
-  console.log("ifCommentHasTag ", ifCommentHasTag);
   const tagWithHyphen = typeof tag === "undefined" ? "" : ` - ${tag}`;
   const commentWithHyphen =
     typeof comment === "undefined"
@@ -133,7 +133,7 @@ function putTogetherFileName(item) {
         : ` - ${comment}`;
   let newName;
   if (ifCommentHasTag) {
-    newName = `${date}-${version}}${commentWithHyphen}${newExt}`;
+    newName = `${date}-${version}${commentWithHyphen}${newExt}`;
   } else {
     newName = `${date}-${version}${tagWithHyphen}${commentWithHyphen}${newExt}`;
   }
@@ -141,7 +141,17 @@ function putTogetherFileName(item) {
 }
 
 function checkIfCommentHasTag(comment, tag) {
-  return false;
+  const commentSplit = comment && splitByHyphen(comment);
+  if (commentSplit) {
+    const first = commentSplit[0];
+    if (first === tag) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
 }
 
 function reassemblyFileName(item) {
