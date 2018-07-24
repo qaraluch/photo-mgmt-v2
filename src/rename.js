@@ -122,6 +122,8 @@ function bumpVersionOfDups(info) {
 
 function putTogetherFileName(item) {
   const { date, version = "", tag, comment, newExt } = item;
+  const ifCommentHasTag = checkIfCommentHasTag(comment, tag);
+  console.log("ifCommentHasTag ", ifCommentHasTag);
   const tagWithHyphen = typeof tag === "undefined" ? "" : ` - ${tag}`;
   const commentWithHyphen =
     typeof comment === "undefined"
@@ -129,8 +131,17 @@ function putTogetherFileName(item) {
       : typeof comment === "object"
         ? ""
         : ` - ${comment}`;
-  const newName = `${date}-${version}${tagWithHyphen}${commentWithHyphen}${newExt}`;
+  let newName;
+  if (ifCommentHasTag) {
+    newName = `${date}-${version}}${commentWithHyphen}${newExt}`;
+  } else {
+    newName = `${date}-${version}${tagWithHyphen}${commentWithHyphen}${newExt}`;
+  }
   return newName;
+}
+
+function checkIfCommentHasTag(comment, tag) {
+  return false;
 }
 
 function reassemblyFileName(item) {

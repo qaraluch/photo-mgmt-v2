@@ -159,7 +159,7 @@ test("rename tag after dir - default", t => {
   t.is(actual2, expected2, msg);
 });
 
-test("rename tag after dir - only once", t => {
+test.only("rename tag after dir - only once", t => {
   const msg = "should rename files that tag is parent dir name only once";
   const inputName1 = "2017-09-19 11.11.11-1 - extraInfo - proper one.jpg";
   const renamedName1 =
