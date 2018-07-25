@@ -85,8 +85,8 @@ const commandRenameAfterParentDirReal = {
 // runThis(commandPresort);
 // runThis(commandPresortReal);
 // runThis(commandRename);
-// runThis(commandRenameAfterParentDir);
-runThis(commandRenameAfterParentDirReal);
+runThis(commandRenameAfterParentDir);
+// runThis(commandRenameAfterParentDirReal);
 
 //index.js
 async function runThis(taskCommand) {
