@@ -145,7 +145,11 @@ function checkIfCommentHasTag(comment, tag) {
       return false;
     }
   } else {
-    return false;
+    if (comment === tag) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

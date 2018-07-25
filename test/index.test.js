@@ -189,7 +189,7 @@ test.only("rename tag after dir - only once", t => {
   const expected3 = renamedName3;
   t.is(actual3, expected3, msg);
   const inputName4 = "2017-09-19 11.11.11-4 - someDir .jpg";
-  const renamedName4 = "2017-09-19 11.11.11-4 - someDir .jpg";
+  const renamedName4 = "2017-09-19 11.11.11-4 - someDir.jpg";
   const [foundItem4] = getItemByOldName(inputName4)(
     renamedFilesForRenameTagAfterPD
   );
