@@ -6,14 +6,21 @@ const { renameFiles } = require("./rename-files.js");
 
 async function runTaskRename(args) {
   try {
-    const { cuSort, tag, renameAfterParentDir } = args;
+    const { cuSort, tag, renameAfterParentDir, dryRun } = args;
     const walkOutput = await getAllFiles(cuSort);
     //TODO: check if cuSort exists
     listReadFiles(walkOutput);
     console.log("\n About to rename files...");
     const renamedFiles = addTag(walkOutput, tag, renameAfterParentDir);
     //TODOC: tag is ignored when renameAfterParentDir is passed as true
-    await renameFiles(renamedFiles);
+    if (dryRun) {
+      console.log("[!][ WARN ] Dry run mode. Not renaming files on disk. \n");
+      renamedFiles.forEach(item =>
+        console.log(item.oldName, " --> ", item.newName)
+      );
+    } else {
+      await renameFiles(renamedFiles);
+    }
     return;
   } catch (error) {
     console.error(error);

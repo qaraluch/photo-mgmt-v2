@@ -36,34 +36,47 @@ const configCU = {
 const commandBackup = {
   command: "backup",
   config: "configTest",
+  dryRun: false,
   checkArchive: true
 };
 
 const commandBackupReal = {
   command: "backup",
   config: "configCU",
+  dryRun: false,
   checkArchive: true
 };
 
 const commandPresort = {
   command: "presort",
-  config: "configTest"
+  config: "configTest",
+  dryRun: false
 };
 
 const commandPresortReal = {
   command: "presort",
-  config: "configCU"
+  config: "configCU",
+  dryRun: false
 };
 
 const commandRename = {
   command: "rename",
   config: "configTestRename",
+  dryRun: false,
   tag: "myTag"
 };
 
 const commandRenameAfterParentDir = {
   command: "rename",
   config: "configTestRename",
+  dryRun: false,
+  renameAfterParentDir: true
+};
+
+const commandRenameAfterParentDirReal = {
+  command: "rename",
+  config: "configCU",
+  dryRun: true,
   renameAfterParentDir: true
 };
 
@@ -72,7 +85,8 @@ const commandRenameAfterParentDir = {
 // runThis(commandPresort);
 // runThis(commandPresortReal);
 // runThis(commandRename);
-runThis(commandRenameAfterParentDir);
+// runThis(commandRenameAfterParentDir);
+runThis(commandRenameAfterParentDirReal);
 
 //index.js
 async function runThis(taskCommand) {
