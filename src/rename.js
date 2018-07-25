@@ -1,5 +1,6 @@
 const path = require("path");
 const R = require("ramda");
+const splitByHyphen = require("qm-txt-splitbyhyphen");
 
 const { getExifData } = require("./exif.js");
 const {
@@ -122,16 +123,41 @@ function bumpVersionOfDups(info) {
 
 function putTogetherFileName(item) {
   const { date, version = "", tag, comment, newExt } = item;
-  const tagWithHyphen = typeof tag === "undefined" ? "" : ` - ${tag}`;
-  const commentWithHyphen =
-    typeof comment === "undefined"
-      ? ""
-      : typeof comment === "object"
-        ? ""
-        : ` - ${comment}`;
-  const newName = `${date}-${version}${tagWithHyphen}${commentWithHyphen}${newExt}`;
+  const ifCommentHasTag = checkIfCommentHasTag(comment, tag);
+  const tagWithHyphen = makeTagWithHyphen(tag);
+  const commentWithHyphen = makeCommentWithHyphen(comment);
+  let newName;
+  if (ifCommentHasTag) {
+    newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+  } else {
+    newName = `${date}-${version}${tagWithHyphen}${commentWithHyphen}${newExt}`;
+  }
   return newName;
 }
+
+function checkIfCommentHasTag(comment, tag) {
+  const commentSplit = comment && splitByHyphen(comment);
+  if (commentSplit) {
+    const first = commentSplit[0];
+    if (first === tag) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+const makeTagWithHyphen = tag =>
+  typeof tag === "undefined" ? "" : ` - ${tag}`;
+
+const makeCommentWithHyphen = comment =>
+  typeof comment === "undefined"
+    ? ""
+    : typeof comment === "object"
+      ? ""
+      : ` - ${comment}`;
 
 function reassemblyFileName(item) {
   const { oldName, date, tag } = item;
