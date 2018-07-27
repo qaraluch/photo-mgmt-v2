@@ -47,6 +47,9 @@ const commandBackupReal = {
   checkArchive: true
 };
 
+// runThis(commandBackup);
+// runThis(commandBackupReal);
+
 const commandPresort = {
   command: "presort",
   config: "configTest",
@@ -59,12 +62,17 @@ const commandPresortReal = {
   dryRun: false
 };
 
+// runThis(commandPresort);
+// runThis(commandPresortReal);
+
 const commandRename = {
   command: "rename",
   config: "configTestRename",
   dryRun: false,
   tag: "myTag"
 };
+
+// runThis(commandRename);
 
 const commandRenameAfterParentDir = {
   command: "rename",
@@ -86,7 +94,7 @@ const commandRenameAfterParentDirExcludeDirs = {
   config: "configTestRename",
   dryRun: false,
   renameAfterParentDir: true,
-  excludeDirs: "some-dir"
+  excludeDirs: "some-dir, terefere"
 };
 
 const commandRenameAfterParentDirReal = {
@@ -95,14 +103,6 @@ const commandRenameAfterParentDirReal = {
   dryRun: true,
   renameAfterParentDir: true
 };
-
-// runThis(commandBackup);
-// runThis(commandBackupReal);
-
-// runThis(commandPresort);
-// runThis(commandPresortReal);
-
-// runThis(commandRename);
 
 // runThis(commandRenameAfterParentDir);
 // runThis(commandRenameAfterParentDirInputDir);
