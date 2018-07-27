@@ -6,7 +6,14 @@ const { renameFiles } = require("./rename-files.js");
 
 async function runTaskRename(args) {
   try {
-    const { cuSort, tag, renameAfterParentDir, dryRun, inputDir } = args;
+    const {
+      cuSort,
+      tag,
+      renameAfterParentDir,
+      dryRun,
+      inputDir,
+      excludeDirs
+    } = args;
     let walkOutput = inputDir
       ? await getAllFiles(inputDir)
       : await getAllFiles(cuSort);

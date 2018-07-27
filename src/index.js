@@ -70,8 +70,23 @@ const commandRenameAfterParentDir = {
   command: "rename",
   config: "configTestRename",
   dryRun: false,
+  renameAfterParentDir: true
+};
+
+const commandRenameAfterParentDirInputDir = {
+  command: "rename",
+  config: "configTestRename",
+  dryRun: false,
   renameAfterParentDir: true,
   inputDir: "./test/fixtures/cu-sort-rename/some-dir/"
+};
+
+const commandRenameAfterParentDirExcludeDirs = {
+  command: "rename",
+  config: "configTestRename",
+  dryRun: false,
+  renameAfterParentDir: true,
+  excludeDirs: "some-dir"
 };
 
 const commandRenameAfterParentDirReal = {
@@ -83,10 +98,15 @@ const commandRenameAfterParentDirReal = {
 
 // runThis(commandBackup);
 // runThis(commandBackupReal);
+
 // runThis(commandPresort);
 // runThis(commandPresortReal);
+
 // runThis(commandRename);
-runThis(commandRenameAfterParentDir);
+
+// runThis(commandRenameAfterParentDir);
+// runThis(commandRenameAfterParentDirInputDir);
+runThis(commandRenameAfterParentDirExcludeDirs);
 // runThis(commandRenameAfterParentDirReal);
 
 //index.js
