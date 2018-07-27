@@ -1,4 +1,5 @@
 const walk = require("qm-walk");
+const path = require("path");
 
 const glob = [
   "*.jpg",
@@ -14,7 +15,8 @@ const glob = [
 ];
 
 async function getAllFiles(scanPath) {
-  const walkOutputExt = await walk({ path: scanPath });
+  const scanPathResolved = path.resolve(scanPath);
+  const walkOutputExt = await walk({ path: scanPathResolved });
   const paths = walkOutputExt.getExtendedInfo().match(glob);
   const files = paths.map(item => item.isFile && item);
   return files;

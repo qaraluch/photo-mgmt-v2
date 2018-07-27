@@ -70,7 +70,8 @@ const commandRenameAfterParentDir = {
   command: "rename",
   config: "configTestRename",
   dryRun: false,
-  renameAfterParentDir: true
+  renameAfterParentDir: true,
+  inputDir: "./test/fixtures/cu-sort-rename/some-dir/"
 };
 
 const commandRenameAfterParentDirReal = {
@@ -85,8 +86,8 @@ const commandRenameAfterParentDirReal = {
 // runThis(commandPresort);
 // runThis(commandPresortReal);
 // runThis(commandRename);
-// runThis(commandRenameAfterParentDir);
-runThis(commandRenameAfterParentDirReal);
+runThis(commandRenameAfterParentDir);
+// runThis(commandRenameAfterParentDirReal);
 
 //index.js
 async function runThis(taskCommand) {
