@@ -1,6 +1,5 @@
 const path = require("path");
 const R = require("ramda");
-const splitByHyphen = require("qm-txt-splitbyhyphen");
 
 const { getExifData } = require("./exif.js");
 const {
@@ -136,20 +135,11 @@ function putTogetherFileName(item) {
 }
 
 function checkIfCommentHasTag(comment, tag) {
-  const commentSplit = comment && splitByHyphen(comment);
-  if (commentSplit) {
-    const first = commentSplit[0];
-    if (first === tag) {
-      return true;
-    } else {
-      return false;
-    }
+  const isTagInComment = comment && comment.includes(tag);
+  if (isTagInComment) {
+    return true;
   } else {
-    if (comment === tag) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 }
 

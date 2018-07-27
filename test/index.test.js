@@ -150,7 +150,7 @@ test("rename tag after dir - default", t => {
   const expected1 = renamedName1;
   t.is(actual1, expected1, msg);
   const inputName2 = "2017-09-19 22.22.22-1 - proper one.jpg";
-  const renamedName2 = "2017-09-19 22.22.22-1 - someDir - proper one.jpg";
+  const renamedName2 = "2017-09-19 22.22.22-1 - some-dir - proper one.jpg";
   const [foundItem2] = getItemByOldName(inputName2)(
     renamedFilesForRenameTagAfterPD
   );
@@ -163,15 +163,15 @@ test("rename tag after dir - only once", t => {
   const msg = "should rename files that tag is parent dir name only once";
   const inputName1 = "2017-09-19 11.11.11-1 - extraInfo - proper one.jpg";
   const renamedName1 =
-    "2017-09-19 11.11.11-1 - someDir - extraInfo - proper one.jpg";
+    "2017-09-19 11.11.11-1 - some-dir - extraInfo - proper one.jpg";
   const [foundItem1] = getItemByOldName(inputName1)(
     renamedFilesForRenameTagAfterPD
   );
   const actual1 = foundItem1.newName;
   const expected1 = renamedName1;
   t.is(actual1, expected1, msg);
-  const inputName2 = "2017-09-19 11.11.11-2 - someDir - proper one.jpg";
-  const renamedName2 = "2017-09-19 11.11.11-2 - someDir - proper one.jpg";
+  const inputName2 = "2017-09-19 11.11.11-2 - some-dir - proper one.jpg";
+  const renamedName2 = "2017-09-19 11.11.11-2 - some-dir - proper one.jpg";
   const [foundItem2] = getItemByOldName(inputName2)(
     renamedFilesForRenameTagAfterPD
   );
@@ -179,17 +179,17 @@ test("rename tag after dir - only once", t => {
   const expected2 = renamedName2;
   t.is(actual2, expected2, msg);
   const inputName3 =
-    "2017-09-19 11.11.11-3 - someDir - extraInfo - proper one.jpg";
+    "2017-09-19 11.11.11-3 - some-dir - extraInfo - proper one.jpg";
   const renamedName3 =
-    "2017-09-19 11.11.11-3 - someDir - extraInfo - proper one.jpg";
+    "2017-09-19 11.11.11-3 - some-dir - extraInfo - proper one.jpg";
   const [foundItem3] = getItemByOldName(inputName3)(
     renamedFilesForRenameTagAfterPD
   );
   const actual3 = foundItem3.newName;
   const expected3 = renamedName3;
   t.is(actual3, expected3, msg);
-  const inputName4 = "2017-09-19 11.11.11-4 - someDir .jpg";
-  const renamedName4 = "2017-09-19 11.11.11-4 - someDir.jpg";
+  const inputName4 = "2017-09-19 11.11.11-4 - some-dir .jpg";
+  const renamedName4 = "2017-09-19 11.11.11-4 - some-dir.jpg";
   const [foundItem4] = getItemByOldName(inputName4)(
     renamedFilesForRenameTagAfterPD
   );

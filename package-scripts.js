@@ -27,7 +27,7 @@ module.exports = {
       resetFixturesRename: {
         description: "reset photos/film fixtures for rename task",
         script:
-          "rm -rf ./test/fixtures/cu-sort-rename && mkdir -p ./test/fixtures/cu-sort-rename/someDir && cp -rf ./test/fixtures/cu-org/*2017*.* ./test/fixtures/cu-sort-rename/someDir && cp -rf ./test/fixtures/cu-org/*.mp4 ./test/fixtures/cu-sort-rename/"
+          "rm -rf ./test/fixtures/cu-sort-rename && mkdir -p ./test/fixtures/cu-sort-rename/some-dir && cp -rf ./test/fixtures/cu-org/*2017*.* ./test/fixtures/cu-sort-rename/some-dir && cp -rf ./test/fixtures/cu-org/*.mp4 ./test/fixtures/cu-sort-rename/"
       }
     }
   },
