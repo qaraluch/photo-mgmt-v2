@@ -47,6 +47,9 @@ const commandBackupReal = {
   checkArchive: true
 };
 
+// runThis(commandBackup);
+// runThis(commandBackupReal);
+
 const commandPresort = {
   command: "presort",
   config: "configTest",
@@ -59,12 +62,17 @@ const commandPresortReal = {
   dryRun: false
 };
 
+// runThis(commandPresort);
+// runThis(commandPresortReal);
+
 const commandRename = {
   command: "rename",
   config: "configTestRename",
   dryRun: false,
   tag: "myTag"
 };
+
+// runThis(commandRename);
 
 const commandRenameAfterParentDir = {
   command: "rename",
@@ -73,19 +81,34 @@ const commandRenameAfterParentDir = {
   renameAfterParentDir: true
 };
 
+const commandRenameAfterParentDirInputDir = {
+  command: "rename",
+  config: "configTestRename",
+  dryRun: false,
+  renameAfterParentDir: true,
+  inputDir: "./test/fixtures/cu-sort-rename/some-dir/"
+};
+
+const commandRenameAfterParentDirExcludeDirs = {
+  command: "rename",
+  config: "configTestRename",
+  dryRun: false,
+  renameAfterParentDir: true,
+  excludeDirs: "some-dir, terefere"
+};
+
 const commandRenameAfterParentDirReal = {
   command: "rename",
   config: "configCU",
   dryRun: true,
-  renameAfterParentDir: true
+  renameAfterParentDir: true,
+  excludeDirs: "peru"
 };
 
-// runThis(commandBackup);
-// runThis(commandBackupReal);
-// runThis(commandPresort);
-// runThis(commandPresortReal);
-// runThis(commandRename);
 // runThis(commandRenameAfterParentDir);
+// runThis(commandRenameAfterParentDirInputDir);
+// runThis(commandRenameAfterParentDirExcludeDirs);
+
 runThis(commandRenameAfterParentDirReal);
 
 //index.js

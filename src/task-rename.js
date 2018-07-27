@@ -6,10 +6,28 @@ const { renameFiles } = require("./rename-files.js");
 
 async function runTaskRename(args) {
   try {
-    const { cuSort, tag, renameAfterParentDir, dryRun } = args;
-    const walkOutput = await getAllFiles(cuSort);
+    const {
+      cuSort,
+      tag,
+      renameAfterParentDir,
+      dryRun,
+      inputDir,
+      excludeDirs
+    } = args;
+    let parsedExcludeDirs;
+    if (excludeDirs) {
+      parsedExcludeDirs = parseExcludeDirs(excludeDirs);
+      listExcludedDirs(parsedExcludeDirs);
+    }
+    let walkOutput = inputDir
+      ? await getAllFiles(inputDir, parsedExcludeDirs)
+      : await getAllFiles(cuSort, parsedExcludeDirs);
     //TODO: check if cuSort exists
     listReadFiles(walkOutput);
+    if (inputDir) {
+      console.log("\n[!] Passed custom input dir...");
+      console.log(inputDir);
+    }
     console.log("\n About to rename files...");
     const renamedFiles = addTag(walkOutput, tag, renameAfterParentDir);
     //TODOC: tag is ignored when renameAfterParentDir is passed as true
@@ -27,13 +45,26 @@ async function runTaskRename(args) {
   }
 }
 
-function listReadFiles(walkOutput) {
-  console.log("Read files:");
-  listFiles(walkOutput);
+//to utils
+function parseExcludeDirs(strWithDirs) {
+  const arrayOfDirs = strWithDirs.split(",").map(str => str.trim());
+  return arrayOfDirs;
 }
 
-function listFiles(walkOutput) {
-  walkOutput.forEach(item => {
+function listExcludedDirs(dirs) {
+  console.log("Excluded dirs:");
+  dirs.forEach(item => {
+    console.log("-->", item);
+  });
+}
+
+function listReadFiles(files) {
+  console.log("Read files:");
+  listFiles(files);
+}
+
+function listFiles(files) {
+  files.forEach(item => {
     console.log("-->", item.name);
   });
 }
