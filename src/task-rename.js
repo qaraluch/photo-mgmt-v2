@@ -14,13 +14,14 @@ async function runTaskRename(args) {
       inputDir,
       excludeDirs
     } = args;
+    let parsedExcludeDirs;
     if (excludeDirs) {
-      const parsedExcludeDirs = parseExcludeDirs(excludeDirs);
+      parsedExcludeDirs = parseExcludeDirs(excludeDirs);
       listExcludedDirs(parsedExcludeDirs);
     }
     let walkOutput = inputDir
-      ? await getAllFiles(inputDir)
-      : await getAllFiles(cuSort);
+      ? await getAllFiles(inputDir, parsedExcludeDirs)
+      : await getAllFiles(cuSort, parsedExcludeDirs);
     //TODO: check if cuSort exists
     listReadFiles(walkOutput);
     if (inputDir) {

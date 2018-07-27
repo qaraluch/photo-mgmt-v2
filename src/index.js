@@ -101,13 +101,15 @@ const commandRenameAfterParentDirReal = {
   command: "rename",
   config: "configCU",
   dryRun: true,
-  renameAfterParentDir: true
+  renameAfterParentDir: true,
+  excludeDirs: "peru"
 };
 
 // runThis(commandRenameAfterParentDir);
 // runThis(commandRenameAfterParentDirInputDir);
-runThis(commandRenameAfterParentDirExcludeDirs);
-// runThis(commandRenameAfterParentDirReal);
+// runThis(commandRenameAfterParentDirExcludeDirs);
+
+runThis(commandRenameAfterParentDirReal);
 
 //index.js
 async function runThis(taskCommand) {
