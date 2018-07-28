@@ -107,11 +107,15 @@ const bumpVersionReducer = (acc, next) => {
       return checkUniqueness(acc, nextToModify);
     }
   }
-  const uniqueVersion = checkUniqueness(acc, next);
-  const modifiedItem = next;
-  modifiedItem.version = uniqueVersion;
-  modifiedItem.newName = putTogetherFileName(modifiedItem);
-  acc.push(modifiedItem);
+  if (next.date) {
+    const uniqueVersion = checkUniqueness(acc, next);
+    const modifiedItem = next;
+    modifiedItem.version = uniqueVersion;
+    modifiedItem.newName = putTogetherFileName(modifiedItem);
+    acc.push(modifiedItem);
+  } else {
+    acc.push(next);
+  }
   return acc;
 };
 
