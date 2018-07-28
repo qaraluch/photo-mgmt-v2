@@ -5,7 +5,9 @@ const { getExifData } = require("./exif.js");
 const {
   parseExistedFileName,
   getDateFromMetadata,
-  correctExifDate
+  correctExifDate,
+  checkIfOneStringIncludesNext,
+  prependStringWithHyphen
 } = require("./utils.js");
 
 const getExt = fileName => path.parse(fileName).ext;
@@ -126,8 +128,8 @@ function bumpVersionOfDups(info) {
 
 function putTogetherFileName(item) {
   const { date, version = "", tag, comment, newExt } = item;
-  const ifCommentHasTag = checkIfCommentHasTag(comment, tag);
-  const tagWithHyphen = makeTagWithHyphen(tag);
+  const ifCommentHasTag = checkIfOneStringIncludesNext(comment, tag);
+  const tagWithHyphen = prependStringWithHyphen(tag);
   const commentWithHyphen = makeCommentWithHyphen(comment);
   let newName;
   if (ifCommentHasTag) {
@@ -138,22 +140,10 @@ function putTogetherFileName(item) {
   return newName;
 }
 
-function checkIfCommentHasTag(comment, tag) {
-  const isTagInComment = comment && comment.includes(tag);
-  if (isTagInComment) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-const makeTagWithHyphen = tag =>
-  typeof tag === "undefined" ? "" : ` - ${tag}`;
-
 const makeCommentWithHyphen = comment =>
   typeof comment === "undefined"
     ? ""
-    : typeof comment === "object"
+    : typeof comment === "object" //for null case
       ? ""
       : ` - ${comment}`;
 
@@ -170,7 +160,7 @@ function reassemblyFileName(item) {
 function putTogetherFileNameNonStandard(item) {
   const { oldName, tag } = item;
   const comment = oldName;
-  const ifCommentHasTag = checkIfCommentHasTag(comment, tag);
+  const ifCommentHasTag = checkIfOneStringIncludesNext(comment, tag);
   const commentWithHyphen = makeCommentWithHyphen(comment);
   let newName;
   if (item.tag) {

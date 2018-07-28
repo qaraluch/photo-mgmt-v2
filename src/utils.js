@@ -42,11 +42,21 @@ function parseExcludeDirs(strWithDirs) {
   return arrayOfDirs;
 }
 
+function checkIfOneStringIncludesNext(strFirst, strSecond) {
+  const check = strFirst && strFirst.includes(strSecond);
+  return check;
+}
+
+const prependStringWithHyphen = str =>
+  typeof str === "undefined" ? "" : ` - ${str}`;
+
 module.exports = {
   getFileTimeStamp,
   regexFileName,
   parseExistedFileName,
   getDateFromMetadata,
   correctExifDate,
-  parseExcludeDirs
+  parseExcludeDirs,
+  checkIfOneStringIncludesNext,
+  prependStringWithHyphen
 };
