@@ -114,7 +114,7 @@ const commandRenameAfterParentDirRealPeru = {
   inputDir: "/mnt/g/Dropbox/mydrocsort/warszawa"
 };
 
-// runThis(commandRenameAfterParentDir);
+runThis(commandRenameAfterParentDir);
 // runThis(commandRenameAfterParentDirInputDir);
 // runThis(commandRenameAfterParentDirExcludeDirs);
 

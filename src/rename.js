@@ -178,7 +178,8 @@ function addTag(walkOutput, tag, renameAfterParentDir) {
     R.map(reassemblyFileName)
   );
   const transducer = R.into([], xform);
-  const renamedFiles = transducer(infoFromFileName);
+  const infoRenamedWithDups = transducer(infoFromFileName);
+  const renamedFiles = bumpVersionOfDups(infoRenamedWithDups);
   return renamedFiles;
 }
 
