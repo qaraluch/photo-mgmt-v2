@@ -158,17 +158,31 @@ const makeCommentWithHyphen = comment =>
       : ` - ${comment}`;
 
 function reassemblyFileName(item) {
-  const { oldName, date, tag } = item;
+  const { date } = item;
   if (date) {
     item.newName = putTogetherFileName(item);
   } else {
-    if (item.tag) {
-      item.newName = `${tag} - ${oldName}`;
-    } else {
-      item.newName = oldName;
-    }
+    item.newName = putTogetherFileNameNonStandard(item);
   }
   return item;
+}
+
+function putTogetherFileNameNonStandard(item) {
+  const { oldName, tag } = item;
+  const comment = oldName;
+  const ifCommentHasTag = checkIfCommentHasTag(comment, tag);
+  const commentWithHyphen = makeCommentWithHyphen(comment);
+  let newName;
+  if (item.tag) {
+    if (ifCommentHasTag) {
+      newName = oldName;
+    } else {
+      newName = `${tag}${commentWithHyphen}`;
+    }
+  } else {
+    item.newName = oldName;
+  }
+  return newName;
 }
 
 function addTag(walkOutput, tag, renameAfterParentDir) {
