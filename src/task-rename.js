@@ -33,9 +33,11 @@ async function runTaskRename(args) {
     //TODOC: tag is ignored when renameAfterParentDir is passed as true
     if (dryRun) {
       console.log("[!][ WARN ] Dry run mode. Not renaming files on disk. \n");
-      renamedFiles.forEach(item =>
-        console.log(item.oldName, " --> ", item.newName)
-      );
+      renamedFiles.forEach(item => {
+        if (item.oldName !== item.newName) {
+          console.log(item.oldName, " --> ", item.newName);
+        }
+      });
     } else {
       await renameFiles(renamedFiles);
     }

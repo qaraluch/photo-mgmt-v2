@@ -102,14 +102,24 @@ const commandRenameAfterParentDirReal = {
   config: "configCU",
   dryRun: true,
   renameAfterParentDir: true,
-  excludeDirs: "peru"
+  excludeDirs:
+    "_camera-save, _filmiki, _grafa_assets, _luzne, _modyf, _ogolne, _org, _piony, _rys_duplikaty, _slides-ep, _slides-nasze, _temp"
+};
+
+const commandRenameAfterParentDirRealPeru = {
+  command: "rename",
+  config: "configCU",
+  dryRun: false,
+  renameAfterParentDir: true,
+  inputDir: "/mnt/g/Dropbox/mydrocsort/warszawa"
 };
 
 // runThis(commandRenameAfterParentDir);
 // runThis(commandRenameAfterParentDirInputDir);
 // runThis(commandRenameAfterParentDirExcludeDirs);
 
-runThis(commandRenameAfterParentDirReal);
+// runThis(commandRenameAfterParentDirReal);
+runThis(commandRenameAfterParentDirRealPeru);
 
 //index.js
 async function runThis(taskCommand) {
