@@ -3,6 +3,7 @@
 const { getAllFiles } = require("./walker.js");
 const { addTag } = require("./rename.js");
 const { renameFiles } = require("./rename-files.js");
+const { parseExcludeDirs } = require("./utils.js");
 
 async function runTaskRename(args) {
   try {
@@ -33,9 +34,11 @@ async function runTaskRename(args) {
     //TODOC: tag is ignored when renameAfterParentDir is passed as true
     if (dryRun) {
       console.log("[!][ WARN ] Dry run mode. Not renaming files on disk. \n");
-      renamedFiles.forEach(item =>
-        console.log(item.oldName, " --> ", item.newName)
-      );
+      renamedFiles.forEach(item => {
+        if (item.oldName !== item.newName) {
+          console.log(item.oldName, " --> ", item.newName);
+        }
+      });
     } else {
       await renameFiles(renamedFiles);
     }
@@ -43,12 +46,6 @@ async function runTaskRename(args) {
   } catch (error) {
     console.error(error);
   }
-}
-
-//to utils
-function parseExcludeDirs(strWithDirs) {
-  const arrayOfDirs = strWithDirs.split(",").map(str => str.trim());
-  return arrayOfDirs;
 }
 
 function listExcludedDirs(dirs) {

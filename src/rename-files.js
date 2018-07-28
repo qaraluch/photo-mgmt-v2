@@ -10,8 +10,10 @@ async function renameFiles(filesInfo) {
     const getDir = fileName => path.parse(fileName).dir;
     const dir = getDir(item.path);
     const destinationPath = path.resolve(dir, item.newName);
-    await renameP(item.path, destinationPath);
-    console.log("    -->", `to: ${destinationPath}`);
+    if (item.path !== destinationPath) {
+      await renameP(item.path, destinationPath);
+      console.log("    -->", `to: ${destinationPath}`);
+    }
     return;
   }
   const promises = filesInfo.map(throat(4, doRenameFiles, Promise.resolve()));
