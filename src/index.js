@@ -119,7 +119,7 @@ const commandRenameAfterParentDirRealPeru = {
 // runThis(commandRenameAfterParentDirExcludeDirs);
 
 // runThis(commandRenameAfterParentDirReal);
-runThis(commandRenameAfterParentDirRealPeru);
+// runThis(commandRenameAfterParentDirRealPeru);
 
 //index.js
 async function runThis(taskCommand) {

@@ -3,6 +3,7 @@
 const { getAllFiles } = require("./walker.js");
 const { addTag } = require("./rename.js");
 const { renameFiles } = require("./rename-files.js");
+const { parseExcludeDirs } = require("./utils.js");
 
 async function runTaskRename(args) {
   try {
@@ -45,12 +46,6 @@ async function runTaskRename(args) {
   } catch (error) {
     console.error(error);
   }
-}
-
-//to utils
-function parseExcludeDirs(strWithDirs) {
-  const arrayOfDirs = strWithDirs.split(",").map(str => str.trim());
-  return arrayOfDirs;
 }
 
 function listExcludedDirs(dirs) {
