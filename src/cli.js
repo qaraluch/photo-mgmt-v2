@@ -14,7 +14,7 @@ const options = {
       alias: "c",
       default: "configTest"
     },
-    dryrun: {
+    dryRun: {
       type: "boolean",
       alias: "d",
       default: false
@@ -41,9 +41,17 @@ const args = meow(
 
       Examples:
         photo-mgmt backup
-        photo-mgmt backup --config configCU
+        photo-mgmt backup -c configCU
         photo-mgmt backup --config configTest --no-check-archive
       
+  2. Presort
+     (Info...)
+
+      Examples:
+        photo-mgmt presort
+        photo-mgmt presort --config configTest --dry-run
+        photo-mgmt presort -c configCU -d
+
   Options:
     -c, --config=<name>     Pass in config name that specifies I/O dirs. See configs.
                             Default: (...).
@@ -51,9 +59,8 @@ const args = meow(
     --check-archive         Perform backup task archive test.
                             Default: yes.
 
-
-
-    --dryrun                Dry run. Disable all operations on files. 
+    --dry-run               Dry run. Disable all operations on files. 
+                            Default: no.
 
     Negate flags by using the --no- prefix.
 

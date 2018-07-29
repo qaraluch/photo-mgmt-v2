@@ -46,7 +46,7 @@ async function runThis(taskCommand) {
         ? await execTaskPresort(argsTaskCommand)
         : command === "rename"
           ? await execTaskRename(argsTaskCommand)
-          : console.log(`Not found this '${command}'!`);
+          : console.log(`Not found this '${command}' command!`);
   console.log("DONE!");
 }
 
@@ -65,11 +65,11 @@ function chooseConfig(configName) {
 function runFromCli(args) {
   // console.log("-->", args.input);
   // console.log("-->", args.flags);
-  const command = args.input[0];
+  const cliCommand = args.input[0];
   const flags = args.flags;
-  const commandObj = Object.assign({}, { command }, flags);
-  console.log("commandObj ", commandObj);
-  runThis(commandObj);
+  const command = Object.assign({}, { command: cliCommand }, flags);
+  console.log("command ", command);
+  runThis(command);
 }
 
 module.exports = {
