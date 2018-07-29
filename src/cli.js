@@ -1,9 +1,19 @@
 #!/usr/bin/env node
+const { runFromCli } = require("./index.js");
 const meow = require("meow");
 //[sindresorhus/meow: CLI app helper](https://github.com/sindresorhus/meow)
 
 const options = {
   flags: {
+    checkArchive: {
+      type: "boolean",
+      default: true
+    },
+    config: {
+      type: "string",
+      alias: "c",
+      default: "configTest"
+    },
     dryrun: {
       type: "boolean",
       alias: "d",
@@ -16,20 +26,36 @@ const args = meow(
   `
   photoMgmt v.2
 
-  ...
+  Personal photo management scripts.
   
-	Usage
-    yt-info <id> --output <path> 
+	Usage:
+    photo-mgmt <command> --flag=<input> 
     
-    <id> of YT playlist  
+    <command> - available task commands:
+      - backup
+      - presort
+      - rename
     
-  Examples:
-	  yt-info PLwJS-...X0 --output /mnt/g/file.json --doubleSave
-    
-	Options
-    -o, --output=<path>     Pass in output path. Results are written to the file.
-                            Otherwise data is saved in currwnt working directory. 
+  1. Backup
+     (Info...)
+
+      Examples:
+        photo-mgmt backup
+        photo-mgmt backup --config configCU
+        photo-mgmt backup --config configTest --no-check-archive
+      
+  Options:
+    -c, --config=<name>     Pass in config name that specifies I/O dirs. See configs.
+                            Default: (...).
+
+    --check-archive         Perform backup task archive test.
+                            Default: yes.
+
+
+
     --dryrun                Dry run. Disable all operations on files. 
+
+    Negate flags by using the --no- prefix.
 
   Global options (overrides above)
     --help 
@@ -38,6 +64,4 @@ const args = meow(
   options
 );
 
-console.log("-->", args.input);
-console.log("-->", args.flags);
-// runCommand(args);
+runFromCli(args);
