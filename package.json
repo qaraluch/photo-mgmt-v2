@@ -20,6 +20,9 @@
   "files": [
     "src/index.js"
   ],
+  "bin": {
+    "photo-mgmt": "src/cli.js"
+  },
   "devDependencies": {
     "eslint": "5.2.0",
     "ava": "0.25.0",
