@@ -50,6 +50,19 @@ function checkIfOneStringIncludesNext(strFirst, strSecond) {
 const prependStringWithHyphen = str =>
   typeof str === "undefined" ? "" : ` - ${str}`;
 
+function resolveOptions(defaultOptions, ...options) {
+  const optionsMapper = opt =>
+    Object.entries(opt)
+      .filter(([_, value]) => typeof value !== "undefined")
+      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+  const endOptions = Object.assign(
+    {},
+    defaultOptions,
+    ...options.map(optionsMapper)
+  );
+  return endOptions;
+}
+
 module.exports = {
   getFileTimeStamp,
   regexFileName,
@@ -58,5 +71,6 @@ module.exports = {
   correctExifDate,
   parseExcludeDirs,
   checkIfOneStringIncludesNext,
-  prependStringWithHyphen
+  prependStringWithHyphen,
+  resolveOptions
 };

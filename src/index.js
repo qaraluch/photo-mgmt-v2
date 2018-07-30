@@ -3,6 +3,7 @@
 const execTaskBackup = require("./task-backup.js");
 const execTaskPresort = require("./task-presort.js");
 const execTaskRename = require("./task-rename.js");
+const { resolveOptions } = require("./utils.js");
 
 //configs:
 const configTest = {
@@ -29,13 +30,17 @@ const configCU = {
   // backup folder for CU
   cuBackup: "/mnt/g/.temp/cuBackup/",
   // Destination Dir for cu-presort
-  cuSort: "/mnt/g/Dropbox/mydrocsort/"
+  cuSort: "/mnt/g/Dropbox/mydrocsort/",
+  excludeDirs:
+    "_camera-save, _filmiki, _grafa_assets, _luzne, _modyf, _ogolne, _org, _piony, _rys_duplikaty, _slides-ep, _slides-nasze, _temp"
 };
 
 async function runThis(taskCommand) {
   const { command, config } = taskCommand;
   const configChosen = chooseConfig(config);
-  const argsTaskCommand = Object.assign({}, configChosen, taskCommand);
+  console.log("configChosen ", configChosen.excludeDirs);
+  // const argsTaskCommand = Object.assign({}, configChosen, taskCommand);
+  const argsTaskCommand = resolveOptions({}, configChosen, taskCommand);
   console.log("About to run task...");
   console.log(command);
   console.log(` of CU dir: ${configChosen.cu}`);
