@@ -170,7 +170,7 @@ function putTogetherFileNameNonStandard(item) {
       newName = `${tag}${commentWithHyphen}`;
     }
   } else {
-    item.newName = oldName;
+    newName = oldName;
   }
   return newName;
 }
