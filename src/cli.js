@@ -14,6 +14,11 @@ const options = {
       alias: "c",
       default: "configTest"
     },
+    tag: {
+      type: "string",
+      alias: "t",
+      default: undefined
+    },
     dryRun: {
       type: "boolean",
       alias: "d",
@@ -52,15 +57,30 @@ const args = meow(
         photo-mgmt presort --config configTest --dry-run
         photo-mgmt presort -c configCU -d
 
+  3. Rename
+     (Info...)
+
+      Examples:
+        photo-mgmt rename -c configTestRename --tag myDir
+        photo-mgmt rename -c configTestRename -dt myDir
+        photo-mgmt rename -c configTestRename --rename-after-parent-dir
+
   Options:
-    -c, --config=<name>     Pass in config name that specifies I/O dirs. See configs.
-                            Default: (...).
+    -c, --config=<name>         Pass in config name that specifies I/O dirs. See configs.
+                                Default: (...).
 
-    --check-archive         Perform backup task archive test.
-                            Default: yes.
+    --check-archive             Perform backup task archive test.
+                                Default: yes.
 
-    --dry-run               Dry run. Disable all operations on files. 
-                            Default: no.
+    --dry-run                   Dry run. Disable all operations on files. 
+                                Default: no.
+
+    --tag                       When perform rename task it adds tag to filename.
+                                Default: undefined.
+
+    --rename-after-parent-dir   Options adds tag as parent dir name while rename task is performed.
+                                It takes precedence over --tag option.
+                                Default: no.
 
     Negate flags by using the --no- prefix.
 
