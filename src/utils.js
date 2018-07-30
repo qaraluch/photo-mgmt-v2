@@ -37,10 +37,26 @@ function parseExistedFileName(baseName) {
   return resultObj;
 }
 
+function parseExcludeDirs(strWithDirs) {
+  const arrayOfDirs = strWithDirs.split(",").map(str => str.trim());
+  return arrayOfDirs;
+}
+
+function checkIfOneStringIncludesNext(strFirst, strSecond) {
+  const check = strFirst && strFirst.includes(strSecond);
+  return check;
+}
+
+const prependStringWithHyphen = str =>
+  typeof str === "undefined" ? "" : ` - ${str}`;
+
 module.exports = {
   getFileTimeStamp,
   regexFileName,
   parseExistedFileName,
   getDateFromMetadata,
-  correctExifDate
+  correctExifDate,
+  parseExcludeDirs,
+  checkIfOneStringIncludesNext,
+  prependStringWithHyphen
 };

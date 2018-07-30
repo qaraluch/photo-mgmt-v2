@@ -5,13 +5,15 @@ const { getExifData } = require("./exif.js");
 const {
   parseExistedFileName,
   getDateFromMetadata,
-  correctExifDate
+  correctExifDate,
+  checkIfOneStringIncludesNext,
+  prependStringWithHyphen
 } = require("./utils.js");
 
 const getExt = fileName => path.parse(fileName).ext;
 const getName = fileName => path.parse(fileName).name;
 
-async function doRenameFiles(walkOutput) {
+async function doRenameFilesForPresort(walkOutput) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
   const infoWithExif = await getExifData(infoFromFileName);
@@ -34,6 +36,7 @@ function pullInfoFromWalk(walkOutput) {
       path: item.path,
       stats: item.stats,
       oldName: item.name,
+      parent: item.parent,
       oldBaseName: getName(item.name),
       newExt: getExt(item.name),
       date: undefined,
@@ -106,11 +109,15 @@ const bumpVersionReducer = (acc, next) => {
       return checkUniqueness(acc, nextToModify);
     }
   }
-  const uniqueVersion = checkUniqueness(acc, next);
-  const modifiedItem = next;
-  modifiedItem.version = uniqueVersion;
-  modifiedItem.newName = putTogetherFileName(modifiedItem);
-  acc.push(modifiedItem);
+  if (next.date) {
+    const uniqueVersion = checkUniqueness(acc, next);
+    const modifiedItem = next;
+    modifiedItem.version = uniqueVersion;
+    modifiedItem.newName = putTogetherFileName(modifiedItem);
+    acc.push(modifiedItem);
+  } else {
+    acc.push(next);
+  }
   return acc;
 };
 
@@ -120,27 +127,81 @@ function bumpVersionOfDups(info) {
 }
 
 function putTogetherFileName(item) {
-  const { date, version = "", comment, newExt } = item;
-  const commentWithHyphen =
-    typeof comment === "undefined"
-      ? ""
-      : typeof comment === "object"
-        ? ""
-        : ` - ${comment}`;
-  const newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+  const { date, version = "", tag, comment, newExt } = item;
+  const ifCommentHasTag = checkIfOneStringIncludesNext(comment, tag);
+  const tagWithHyphen = prependStringWithHyphen(tag);
+  const commentWithHyphen = makeCommentWithHyphen(comment);
+  let newName;
+  if (ifCommentHasTag) {
+    newName = `${date}-${version}${commentWithHyphen}${newExt}`;
+  } else {
+    newName = `${date}-${version}${tagWithHyphen}${commentWithHyphen}${newExt}`;
+  }
   return newName;
 }
 
+const makeCommentWithHyphen = comment =>
+  typeof comment === "undefined"
+    ? ""
+    : typeof comment === "object" //for null case
+      ? ""
+      : ` - ${comment}`;
+
 function reassemblyFileName(item) {
-  const { oldName, date } = item;
+  const { date } = item;
   if (date) {
     item.newName = putTogetherFileName(item);
   } else {
-    item.newName = oldName;
+    item.newName = putTogetherFileNameNonStandard(item);
   }
   return item;
 }
 
+function putTogetherFileNameNonStandard(item) {
+  const { oldName, tag } = item;
+  const comment = oldName;
+  const ifCommentHasTag = checkIfOneStringIncludesNext(comment, tag);
+  const commentWithHyphen = makeCommentWithHyphen(comment);
+  let newName;
+  if (item.tag) {
+    if (ifCommentHasTag) {
+      newName = oldName;
+    } else {
+      newName = `${tag}${commentWithHyphen}`;
+    }
+  } else {
+    newName = oldName;
+  }
+  return newName;
+}
+
+function addTag(walkOutput, tag, renameAfterParentDir) {
+  const infoToRename = pullInfoFromWalk(walkOutput);
+  const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
+  const xform = R.compose(
+    R.map(renameAfterParentDir ? addParentDirAsTag : addTagToInfoObj(tag)),
+    R.map(transformExtToLowerCase),
+    R.map(transformExtLongJpeg),
+    R.map(addVersions),
+    R.map(reassemblyFileName)
+  );
+  const transducer = R.into([], xform);
+  const infoRenamedWithDups = transducer(infoFromFileName);
+  const renamedFiles = bumpVersionOfDups(infoRenamedWithDups);
+  return renamedFiles;
+}
+
+const addTagToInfoObj = tag => item => {
+  item.tag = tag;
+  return item;
+};
+
+const addParentDirAsTag = item => {
+  item.tag = item.parent;
+  return item;
+};
+
 module.exports = {
-  doRenameFiles
+  doRenameFilesForPresort,
+  addTag
 };
