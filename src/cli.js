@@ -19,6 +19,21 @@ const options = {
       alias: "t",
       default: undefined
     },
+    renameAfterParentDir: {
+      type: "boolean",
+      alias: "r",
+      default: false
+    },
+    inputDir: {
+      type: "string",
+      alias: "i",
+      default: undefined
+    },
+    excludeDirs: {
+      type: "string",
+      alias: "e",
+      default: undefined
+    },
     dryRun: {
       type: "boolean",
       alias: "d",
@@ -64,6 +79,12 @@ const args = meow(
         photo-mgmt rename -c configTestRename --tag myDir
         photo-mgmt rename -c configTestRename -dt myDir
         photo-mgmt rename -c configTestRename --rename-after-parent-dir
+        photo-mgmt rename -c configTestRename -r
+        photo-mgmt rename -c configTestRename --input-dir "./test/fixtures/cu-sort-rename/some-dir/"
+        photo-mgmt rename -c configTestRename -i "./test/fixtures/cu-sort-rename/some-dir/"
+        photo-mgmt rename -c configTestRename -i #rename in cwd (!... not working yet!)
+        photo-mgmt rename -c configTestRename --exclude-dirs "some-dir"
+        photo-mgmt rename -c configTestRename -e "some-dir"
 
   Options:
     -c, --config=<name>         Pass in config name that specifies I/O dirs. See configs.
@@ -73,6 +94,7 @@ const args = meow(
                                 Default: yes.
 
     --dry-run                   Dry run. Disable all operations on files. 
+                                Apples only to presort and rename tasks.  
                                 Default: no.
 
     --tag                       When perform rename task it adds tag to filename.
@@ -80,6 +102,13 @@ const args = meow(
 
     --rename-after-parent-dir   Options adds tag as parent dir name while rename task is performed.
                                 It takes precedence over --tag option.
+                                Default: no.
+
+    --input-dir                 Specifies custom base dir for rename task.
+                                When flag is passed without then rename is performed on cwd dir.
+                                Default: no.
+
+    --exclude-dirs              Pass coma separated string with list of dirs to exclude.
                                 Default: no.
 
     Negate flags by using the --no- prefix.
