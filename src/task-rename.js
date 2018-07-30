@@ -31,7 +31,6 @@ async function runTaskRename(args) {
     }
     console.log("\n About to rename files...");
     const renamedFiles = addTag(walkOutput, tag, renameAfterParentDir);
-    //TODOC: tag is ignored when renameAfterParentDir is passed as true
     if (dryRun) {
       console.log("[!][ WARN ] Dry run mode. Not renaming files on disk. \n");
       renamedFiles.forEach(item => {
