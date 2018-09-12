@@ -12,7 +12,7 @@ const configTest = {
   // backup folder for CU
   cuBackup: "./test/fixtures/cu-backup/",
   // Destination Dir for cu-presort
-  cuSort: "./test/fixtures/cu-sort/"
+  cuPresort: "./test/fixtures/cu-presort/"
 };
 
 const configTestRename = {
@@ -21,7 +21,7 @@ const configTestRename = {
   // backup folder for CU
   cuBackup: "./test/fixtures/cu-backup/",
   // Destination Dir for cu-presort
-  cuSort: "./test/fixtures/cu-sort-rename/"
+  cuPresort: "./test/fixtures/cu-presort-rename/"
 };
 
 const configCU = {
@@ -30,7 +30,7 @@ const configCU = {
   // backup folder for CU
   cuBackup: "/mnt/g/.temp/cuBackup/",
   // Destination Dir for cu-presort
-  cuSort: "/mnt/g/Dropbox/mydrocsort/",
+  cuPresort: "/mnt/g/Dropbox/mydrocsort/",
   excludeDirs:
     "_camera-save, _filmiki, _grafa_assets, _luzne, _modyf, _ogolne, _org, _piony, _rys_duplikaty, _slides-ep, _slides-nasze, _temp"
 };
@@ -67,12 +67,12 @@ function chooseConfig(configName) {
 }
 
 function runFromCli(args) {
-  // console.log("-->", args.input);
-  // console.log("-->", args.flags);
   const cliCommand = args.input[0];
   const flags = args.flags;
   const command = Object.assign({}, { command: cliCommand }, flags);
-  console.log("command ", command);
+  // console.log("-->", args.input);
+  // console.log("-->", args.flags);
+  // console.log("command ", command);
   runThis(command);
 }
 

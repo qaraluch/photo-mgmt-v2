@@ -80,8 +80,8 @@ const args = meow(
         photo-mgmt rename -c configTestRename -dt myDir
         photo-mgmt rename -c configTestRename --rename-after-parent-dir
         photo-mgmt rename -c configTestRename -r
-        photo-mgmt rename -c configTestRename --input-dir "./test/fixtures/cu-sort-rename/some-dir/"
-        photo-mgmt rename -c configTestRename -i "./test/fixtures/cu-sort-rename/some-dir/"
+        photo-mgmt rename -c configTestRename --input-dir "./test/fixtures/cu-presort-rename/some-dir/"
+        photo-mgmt rename -c configTestRename -i "./test/fixtures/cu-presort-rename/some-dir/"
         photo-mgmt rename -c configTestRename -i #rename in cwd (!... not working yet!)
         photo-mgmt rename -c configTestRename --exclude-dirs "some-dir"
         photo-mgmt rename -c configTestRename -e "some-dir"

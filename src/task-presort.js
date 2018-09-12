@@ -7,9 +7,9 @@ const { moveFilesTo } = require("./move-files.js");
 
 async function runTaskPresort(args) {
   try {
-    const { cu, cuSort, dryRun } = args;
+    const { cu, cuPresort, dryRun } = args;
     const walkOutput = await getAllFiles(cu);
-    await makeDir(cuSort);
+    await makeDir(cuPresort);
     listReadFiles(walkOutput);
     console.log("\n About to rename files...");
     const renamedFiles = await doRenameFilesForPresort(walkOutput);
@@ -20,7 +20,7 @@ async function runTaskPresort(args) {
         console.log(item.oldName, " --> ", item.newName)
       );
     } else {
-      await moveFilesTo(renamedFiles, cuSort);
+      await moveFilesTo(renamedFiles, cuPresort);
     }
     return;
   } catch (error) {

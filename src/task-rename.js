@@ -8,7 +8,7 @@ const { parseExcludeDirs } = require("./utils.js");
 async function runTaskRename(args) {
   try {
     const {
-      cuSort,
+      cuPresort,
       tag,
       renameAfterParentDir,
       dryRun,
@@ -22,8 +22,8 @@ async function runTaskRename(args) {
     }
     let walkOutput = inputDir
       ? await getAllFiles(inputDir, parsedExcludeDirs)
-      : await getAllFiles(cuSort, parsedExcludeDirs);
-    //TODO: check if cuSort exists
+      : await getAllFiles(cuPresort, parsedExcludeDirs);
+    //TODO: check if cuPresort exists
     listReadFiles(walkOutput);
     if (inputDir) {
       console.log("\n[!] Passed custom input dir...");

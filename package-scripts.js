@@ -19,12 +19,12 @@ module.exports = {
       resetFixtures: {
         description: "reset photos/film fixtures",
         script:
-          "rm -rf ./test/fixtures/cu ./test/fixtures/cu-backup ./test/fixtures/cu-sort && cp -rf ./test/fixtures/cu-org/ ./test/fixtures/cu"
+          "rm -rf ./test/fixtures/cu ./test/fixtures/cu-backup ./test/fixtures/cu-presort && cp -rf ./test/fixtures/cu-org/ ./test/fixtures/cu"
       },
       resetFixturesRename: {
         description: "reset photos/film fixtures for rename task",
         script:
-          "rm -rf ./test/fixtures/cu-sort-rename && mkdir -p ./test/fixtures/cu-sort-rename/some-dir && cp -rf ./test/fixtures/cu-org/*2017*.* ./test/fixtures/cu-sort-rename/some-dir && cp -rf ./test/fixtures/cu-org/*.mp4 ./test/fixtures/cu-sort-rename/"
+          "rm -rf ./test/fixtures/cu-presort-rename && mkdir -p ./test/fixtures/cu-presort-rename/some-dir && cp -rf ./test/fixtures/cu-org/*2017*.* ./test/fixtures/cu-presort-rename/some-dir && cp -rf ./test/fixtures/cu-org/*.mp4 ./test/fixtures/cu-presort-rename/"
       }
     }
   },

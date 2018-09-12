@@ -7,7 +7,7 @@ const { getAllFiles } = require("../src/walker.js");
 
 const cwd = process.cwd();
 const cu = path.join(cwd, "/test/fixtures/cu");
-const cuSortRename = path.join(cwd, "/test/fixtures/cu-sort-rename");
+const cuPresortRename = path.join(cwd, "/test/fixtures/cu-presort-rename");
 
 let walkOutput,
   walkOutputSortRename,
@@ -31,7 +31,7 @@ const renameAfterParentDir = true;
 
 test.before(async () => {
   walkOutput = await getAllFiles(cu);
-  walkOutputSortRename = await getAllFiles(cuSortRename);
+  walkOutputSortRename = await getAllFiles(cuPresortRename);
   renamedFiles = await doRenameFilesForPresort(walkOutput);
   renamedFilesForRenameTag = await addTag(walkOutputSortRename, tagForRename);
   renamedFilesForRenameTagAfterPD = await addTag(
@@ -142,7 +142,7 @@ test("rename tag - files without date", t => {
 test("rename tag after dir - default", t => {
   const msg = "should rename files that tag is parent dir name";
   const inputName1 = "no-film-file.mp4";
-  const renamedName1 = "cu-sort-rename - no-film-file.mp4";
+  const renamedName1 = "cu-presort-rename - no-film-file.mp4";
   const [foundItem1] = getItemByOldName(inputName1)(
     renamedFilesForRenameTagAfterPD
   );

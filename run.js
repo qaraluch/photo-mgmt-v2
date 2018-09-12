@@ -54,7 +54,7 @@ const commandRenameAfterParentDirInputDir = {
   config: "configTestRename",
   dryRun: false,
   renameAfterParentDir: true,
-  inputDir: "./test/fixtures/cu-sort-rename/some-dir/"
+  inputDir: "./test/fixtures/cu-presort-rename/some-dir/"
 };
 
 const commandRenameAfterParentDirExcludeDirs = {
@@ -74,7 +74,7 @@ const commandRenameAfterParentDirReal = {
     "_camera-save, _filmiki, _grafa_assets, _luzne, _modyf, _ogolne, _org, _piony, _rys_duplikaty, _slides-ep, _slides-nasze, _temp"
 };
 
-const commandRenameAfterParentDirRealPeru = {
+const commandRenameAfterParentDirRealInput = {
   command: "rename",
   config: "configCU",
   dryRun: false,
@@ -87,4 +87,4 @@ const commandRenameAfterParentDirRealPeru = {
 // runThis(commandRenameAfterParentDirInputDir);
 
 // runThis(commandRenameAfterParentDirReal);
-// runThis(commandRenameAfterParentDirRealPeru);
+// runThis(commandRenameAfterParentDirRealInput);
