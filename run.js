@@ -15,7 +15,7 @@ const commandBackupReal = {
   checkArchive: true
 };
 
-runThis(commandBackup);
+// runThis(commandBackup);
 // runThis(commandBackupReal);
 
 const commandPresort = {
@@ -83,8 +83,8 @@ const commandRenameAfterParentDirRealPeru = {
 };
 
 // runThis(commandRenameAfterParentDir);
-// runThis(commandRenameAfterParentDirInputDir);
 // runThis(commandRenameAfterParentDirExcludeDirs);
+// runThis(commandRenameAfterParentDirInputDir);
 
 // runThis(commandRenameAfterParentDirReal);
 // runThis(commandRenameAfterParentDirRealPeru);

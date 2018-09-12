@@ -39,7 +39,6 @@ async function runThis(taskCommand) {
   const { command, config } = taskCommand;
   const configChosen = chooseConfig(config);
   console.log("configChosen ", configChosen.excludeDirs);
-  // const argsTaskCommand = Object.assign({}, configChosen, taskCommand);
   const argsTaskCommand = resolveOptions({}, configChosen, taskCommand);
   console.log("About to run task...");
   console.log(command);
