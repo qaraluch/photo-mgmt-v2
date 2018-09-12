@@ -43,7 +43,6 @@ async function runThis(taskCommand) {
   const argsTaskCommand = resolveOptions({}, cwd, configChosen, taskCommand);
   console.log("About to run task...");
   console.log(command);
-  console.log(` of CU dir: ${configChosen.cu}`); //TODO: change - wrong info when custom input / output passed
   const taskCommandChosen =
     command === "backup"
       ? await execTaskBackup(argsTaskCommand)
@@ -72,7 +71,7 @@ function runFromCli(args) {
   const flags = args.flags;
   const command = Object.assign({}, { command: cliCommand }, flags);
   // console.log("-->", args.input);
-  console.log("-->", args.flags);
+  // console.log("-->", args.flags);
   // console.log("command ", command);
   runThis(command);
 }

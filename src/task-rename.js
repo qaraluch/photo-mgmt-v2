@@ -3,11 +3,12 @@
 const { getAllFiles } = require("./walker.js");
 const { addTag } = require("./rename.js");
 const { renameFiles } = require("./rename-files.js");
-const { parseExcludeDirs } = require("./utils.js");
+const { parseExcludeDirs, chooseWhichPath } = require("./utils.js");
 
 async function runTaskRename(args) {
   try {
     const {
+      cwd,
       cuPresort,
       tag,
       renameAfterParentDir,
@@ -20,15 +21,13 @@ async function runTaskRename(args) {
       parsedExcludeDirs = parseExcludeDirs(excludeDirs);
       listExcludedDirs(parsedExcludeDirs);
     }
-    let walkOutput = inputDir
-      ? await getAllFiles(inputDir, parsedExcludeDirs)
-      : await getAllFiles(cuPresort, parsedExcludeDirs);
+    const inputPath = chooseWhichPath(inputDir, cuPresort, cwd);
+    let walkOutput = await getAllFiles(inputPath, parsedExcludeDirs);
     //TODO: check if cuPresort or inputDir exists
-    //TODO: refactor with chooseWhichPath
     listReadFiles(walkOutput);
-    if (inputDir) {
+    if (inputDir || inputDir === "") {
       console.log("\n[!] Passed custom input dir...");
-      console.log(inputDir);
+      console.log(inputPath);
     }
     console.log("\n About to rename files...");
     const renamedFiles = addTag(walkOutput, tag, renameAfterParentDir);
