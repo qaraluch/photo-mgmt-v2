@@ -78,8 +78,10 @@ const args = meow(
         photo-mgmt presort -c configCU -d
         photo-mgmt presort --input-dir "./test/fixtures/cu"
         photo-mgmt presort -i "./test/fixtures/cu"
+        photo-mgmt presort -i #presort in cwd 
         photo-mgmt presort --output-dir "./test/fixtures/custom-cu-presort"
         photo-mgmt presort -o "./test/fixtures/custom-cu-presort"
+        photo-mgmt presort -o #presort to temporary dir in cwd
 
   3. Rename
      (Info...)
@@ -91,6 +93,7 @@ const args = meow(
         photo-mgmt rename -c configTestRename -r
         photo-mgmt rename -c configTestRename --input-dir "./test/fixtures/cu-presort-rename/some-dir/"
         photo-mgmt rename -c configTestRename -i "./test/fixtures/cu-presort-rename/some-dir/"
+        photo-mgmt rename -c configTestRename -i #rename in cwd 
         photo-mgmt rename -c configTestRename --exclude-dirs "some-dir"
         photo-mgmt rename -c configTestRename -e "some-dir"
 
@@ -112,7 +115,13 @@ const args = meow(
                                     It takes precedence over --tag option.
                                     Default: no.
 
-    -i, --input-dir                 Specifies custom base dir for rename task.
+    -i, --input-dir                 Specifies custom base dir for tasks.
+                                    When flag is passed without value then tasks is performed on cwd dir.
+                                    Default: undefined.
+
+    -o, --output-dir                Specifies custom output dir for presort task.
+                                    When flag is passed without value then task outputs in temporary dir in cwd.
+                                    (e.i.: ./temp-cu-presort-<times-stamp> )
                                     Default: undefined.
 
     -e, --exclude-dirs              Pass coma separated string with list of dirs to exclude.
