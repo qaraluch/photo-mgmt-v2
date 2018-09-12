@@ -63,6 +63,12 @@ function resolveOptions(defaultOptions, ...options) {
   return endOptions;
 }
 
+function chooseWhichPath(flagPath, configPath, cwdPath) {
+  const chosen =
+    flagPath === undefined ? configPath : flagPath === "" ? cwdPath : flagPath;
+  return chosen;
+}
+
 module.exports = {
   getFileTimeStamp,
   regexFileName,
@@ -72,5 +78,6 @@ module.exports = {
   parseExcludeDirs,
   checkIfOneStringIncludesNext,
   prependStringWithHyphen,
-  resolveOptions
+  resolveOptions,
+  chooseWhichPath
 };

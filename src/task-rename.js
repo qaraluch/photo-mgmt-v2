@@ -23,7 +23,8 @@ async function runTaskRename(args) {
     let walkOutput = inputDir
       ? await getAllFiles(inputDir, parsedExcludeDirs)
       : await getAllFiles(cuPresort, parsedExcludeDirs);
-    //TODO: check if cuPresort exists
+    //TODO: check if cuPresort or inputDir exists
+    //TODO: refactor with chooseWhichPath
     listReadFiles(walkOutput);
     if (inputDir) {
       console.log("\n[!] Passed custom input dir...");

@@ -19,7 +19,7 @@ module.exports = {
       resetFixtures: {
         description: "reset photos/film fixtures",
         script:
-          "rm -rf ./test/fixtures/cu ./test/fixtures/cu-backup ./test/fixtures/cu-presort && cp -rf ./test/fixtures/cu-org/ ./test/fixtures/cu"
+          "rm -rf ./test/fixtures/cu ./test/fixtures/cu-backup ./test/fixtures/cu-presort ./test/fixtures/custom-cu-presort && cp -rf ./test/fixtures/cu-org/ ./test/fixtures/cu"
       },
       resetFixturesRename: {
         description: "reset photos/film fixtures for rename task",
