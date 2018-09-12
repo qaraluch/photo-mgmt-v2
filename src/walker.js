@@ -1,23 +1,16 @@
 const walk = require("qm-walk");
 const path = require("path");
 
-const glob = [
-  "*.jpg",
-  "*.jpeg",
-  "*.JPG",
-  "*.JPEG",
-  "*.png",
-  "*.PNG",
-  "*.mp4",
-  "*.MP4",
-  "*.gif",
-  "*.GIF"
-];
+const globOptions = { nocase: true };
+//TODOC: case insensitive extension files.
+
+const glob = ["*.jpg", "*.jpeg", "*.png", "*.mp4", "*.gif"];
+//TODOC: list of supported extensions.
 
 async function getAllFiles(scanPath, filterOut) {
   const scanPathResolved = path.resolve(scanPath);
   const walkOutputExt = await walk({ path: scanPathResolved, filterOut });
-  const paths = walkOutputExt.getExtendedInfo().match(glob);
+  const paths = walkOutputExt.getExtendedInfo().match(glob, globOptions);
   const files = paths.map(item => item.isFile && item);
   return files;
 }
