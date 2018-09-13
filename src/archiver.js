@@ -36,8 +36,8 @@ function archiveIt(backupFilePath, toBackupFilesPaths) {
     archive.pipe(output);
 
     toBackupFilesPaths.forEach(pth => {
-      archive.file(pth, {
-        name: `${path.basename(backupFilePath, ".zip")}/${path.basename(pth)}`
+      archive.file(pth[0], {
+        name: `${path.basename(backupFilePath, ".zip")}/${pth[1]}` //see: copyPathsForBackup
       });
     });
 
