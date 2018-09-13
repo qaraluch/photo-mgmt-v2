@@ -9,6 +9,10 @@ const options = {
       type: "boolean",
       default: true
     },
+    prefixArchiveName: {
+      type: "string",
+      default: "cu-temp-arch"
+    },
     config: {
       type: "string",
       alias: "c",

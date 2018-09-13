@@ -7,15 +7,24 @@ const { getAllFiles } = require("./walker.js");
 const { archiveIt, spawnCheckArchive } = require("./archiver.js");
 
 async function runTaskBackup(args) {
+  console.log("args ", args);
   try {
-    const { cwd, cu, cuBackup, checkArchive, inputDir, outputDir } = args;
+    const {
+      cwd,
+      cu,
+      cuBackup,
+      checkArchive,
+      inputDir,
+      outputDir,
+      prefixArchiveName
+    } = args;
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
     const outputPath = chooseWhichPath(outputDir, cuBackup, cwd);
     const walkOutput = await getAllFiles(inputPath);
     await makeDir(outputPath);
     listReadFiles(walkOutput);
     const getPathsFilesToArchive = copyPathsForBackup(walkOutput);
-    const backupFile = constructBackupFileName();
+    const backupFile = constructBackupFileName(prefixArchiveName, inputPath);
     const backupFilePath = path.resolve(outputPath, backupFile);
     console.log("About to create zip file:");
     console.log(` ${backupFile}`);
@@ -49,8 +58,10 @@ function copyPathsForBackup(walkOutput) {
   return copyPaths;
 }
 
-function constructBackupFileName() {
-  const fileName = `cu-temp-arch-${getFileTimeStamp()}.zip`;
+function constructBackupFileName(prefixArchiveName, inputPath) {
+  const prefixChose =
+    prefixArchiveName === "" ? path.basename(inputPath) : prefixArchiveName;
+  const fileName = `${prefixChose}-${getFileTimeStamp()}.zip`;
   return fileName;
 }
 
