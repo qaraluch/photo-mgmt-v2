@@ -21,6 +21,7 @@ async function runTaskBackup(args) {
     console.log("Content of dir: ", inputPath);
     const outputPath = chooseWhichPath(outputDir, cuBackup, cwd);
     const walkOutput = await getAllFiles(inputPath);
+    console.log("walkOutput ", walkOutput[3]);
     await makeDir(outputPath);
     listReadFiles(walkOutput);
     const getPathsFilesToArchive = copyPathsForBackup(walkOutput);
@@ -54,7 +55,7 @@ function listFiles(walkOutput) {
 }
 
 function copyPathsForBackup(walkOutput) {
-  const copyPaths = [...walkOutput.map(item => item.path)];
+  const copyPaths = [...walkOutput.map(item => [item.path, item.crown])]; // arr[1] - internal archive dir structure
   return copyPaths;
 }
 
