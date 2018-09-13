@@ -2,24 +2,26 @@
 const path = require("path");
 const makeDir = require("make-dir");
 
-const { getFileTimeStamp } = require("./utils.js");
+const { getFileTimeStamp, chooseWhichPath } = require("./utils.js");
 const { getAllFiles } = require("./walker.js");
 const { archiveIt, spawnCheckArchive } = require("./archiver.js");
 
 async function runTaskBackup(args) {
   try {
-    const { cu, cuBackup, checkArchive } = args;
-    const walkOutput = await getAllFiles(cu);
-    await makeDir(cuBackup);
+    const { cwd, cu, cuBackup, checkArchive, inputDir, outputDir } = args;
+    const inputPath = chooseWhichPath(inputDir, cu, cwd);
+    const outputPath = chooseWhichPath(outputDir, cuBackup, cwd);
+    const walkOutput = await getAllFiles(inputPath);
+    await makeDir(outputPath);
     listReadFiles(walkOutput);
-    const toBackupFilesPaths = copyPathsForBackup(walkOutput);
+    const getPathsFilesToArchive = copyPathsForBackup(walkOutput);
     const backupFile = constructBackupFileName();
-    const backupFilePath = path.resolve(cuBackup, backupFile);
+    const backupFilePath = path.resolve(outputPath, backupFile);
     console.log("About to create zip file:");
     console.log(` ${backupFile}`);
     console.log("in:");
-    console.log(` ${cuBackup}`);
-    await archiveIt(backupFilePath, toBackupFilesPaths);
+    console.log(` ${outputPath}`);
+    await archiveIt(backupFilePath, getPathsFilesToArchive);
     if (checkArchive) {
       console.log("Checking archive file: ...");
       const stdoutCommunicate = await spawnCheckArchive(backupFilePath);
