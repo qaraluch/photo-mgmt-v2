@@ -72,6 +72,13 @@ const args = meow(
         photo-mgmt backup
         photo-mgmt backup -c configCU
         photo-mgmt backup --config configTest --no-check-archive
+        photo-mgmt backup --prefix-archive-name # get current dir name as prefix
+        photo-mgmt backup --prefix-archive-name my-name
+        photo-mgmt backup -i "./test/fixtures/cu"
+        photo-mgmt backup -i #archive content of cwd 
+        photo-mgmt backup --output-dir "./test/fixtures/custom-cu-presort"
+        photo-mgmt backup -o "./test/fixtures/custom-cu-presort"
+        photo-mgmt backup -o #save archive file in cwd
       
   2. Presort
      (Info...)
@@ -102,33 +109,40 @@ const args = meow(
         photo-mgmt rename -c configTestRename -e "some-dir"
 
   Options:
-    -c, --config=<name>             Pass in config name that specifies I/O dirs. See configs.
+    -c, --config [name]             Pass in config name that specifies I/O dirs. See configs.
+                                    When no [name] variable is passed then (...)
                                     Default: (...).
 
     --check-archive                 Perform backup task archive test.
                                     Default: yes.
 
+    --prefix-archive-name [name]    Changes prefix of archive file name.
+                                    When no [name] variable is passed then current
+                                    dir name becomes a prefix string.
+                                    Default: "cu-temp-arch".
+
     -d, --dry-run                   Dry run. Disable all operations on files. 
                                     Apples only to presort and rename tasks.  
                                     Default: no.
 
-    -t, --tag                       When perform rename task it adds tag to filename.
+    -t, --tag <name>                When perform rename task it adds tag to filename.
                                     Default: undefined.
 
     -r, --rename-after-parent-dir   Options adds tag as parent dir name while rename task is performed.
                                     It takes precedence over --tag option.
                                     Default: no.
 
-    -i, --input-dir                 Specifies custom base dir for tasks.
+    -i, --input-dir [path]          Specifies custom base dir for tasks.
                                     When flag is passed without value then tasks is performed on cwd dir.
                                     Default: undefined.
 
-    -o, --output-dir                Specifies custom output dir for presort task.
+    -o, --output-dir [path]         Specifies custom output dir for tasks.
                                     When flag is passed without value then task outputs in temporary dir in cwd.
                                     (e.i.: ./temp-cu-presort-<times-stamp> )
+                                    For backup task option without value results in saving the archive in cwd.
                                     Default: undefined.
 
-    -e, --exclude-dirs              Pass coma separated string with list of dirs to exclude.
+    -e, --exclude-dirs <string>     Pass coma separated string with list of dirs to exclude for rename task.
                                     Default: undefined.
 
     Negate flags by using the --no- prefix.

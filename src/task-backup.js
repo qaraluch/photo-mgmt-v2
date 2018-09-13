@@ -7,7 +7,6 @@ const { getAllFiles } = require("./walker.js");
 const { archiveIt, spawnCheckArchive } = require("./archiver.js");
 
 async function runTaskBackup(args) {
-  console.log("args ", args);
   try {
     const {
       cwd,
@@ -19,6 +18,7 @@ async function runTaskBackup(args) {
       prefixArchiveName
     } = args;
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
+    console.log("Content of dir: ", inputPath);
     const outputPath = chooseWhichPath(outputDir, cuBackup, cwd);
     const walkOutput = await getAllFiles(inputPath);
     await makeDir(outputPath);
