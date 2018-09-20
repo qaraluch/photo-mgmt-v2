@@ -34,8 +34,11 @@
   },
   "dependencies": {
     "archiver": "3.0.0",
+    "bunyan": "1.8.12",
+    "chalk": "2.4.1",
     "dist-exiftool": "10.53.0",
     "execa": "1.0.0",
+    "figlet": "1.2.0",
     "fs-extra": "7.0.0",
     "make-dir": "1.3.0",
     "meow": "5.0.0",
@@ -43,6 +46,7 @@
     "node-exiftool": "2.3.0",
     "qm-walk": "2.2.1",
     "ramda": "0.25.0",
+    "signale": "1.3.0",
     "throat": "4.1.0"
   }
 }
