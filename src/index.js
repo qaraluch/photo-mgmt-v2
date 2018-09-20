@@ -4,6 +4,7 @@ const execTaskBackup = require("./task-backup.js");
 const execTaskPresort = require("./task-presort.js");
 const execTaskRename = require("./task-rename.js");
 const { resolveOptions } = require("./utils.js");
+const { initLogger, initUiLogger } = require("./logger.js");
 
 //configs:
 const configTest = {
@@ -36,22 +37,42 @@ const configCU = {
 };
 
 async function runThis(taskCommand) {
-  const cwd = { cwd: process.cwd() };
-  const { command, config } = taskCommand;
-  const configChosen = chooseConfig(config);
-  console.log("configChosen ", configChosen.excludeDirs);
-  const argsTaskCommand = resolveOptions({}, cwd, configChosen, taskCommand);
-  console.log("About to run task...");
-  console.log(command);
-  const taskCommandChosen =
-    command === "backup"
-      ? await execTaskBackup(argsTaskCommand)
-      : command === "presort"
-        ? await execTaskPresort(argsTaskCommand)
-        : command === "rename"
-          ? await execTaskRename(argsTaskCommand)
-          : console.log(`Not found this '${command}' command!`);
-  console.log("DONE!");
+  try {
+    const delimiter = "photo-mgmt";
+    const cwd = { cwd: process.cwd() };
+    const { command, config } = taskCommand;
+    const configChosen = chooseConfig(config);
+    const argsTaskCommand = resolveOptions({}, cwd, configChosen, taskCommand);
+    const logOptions = {
+      delimiter,
+      silent: false, //TODO: add cli flag
+      disableFileLogs: true, //TODO: add cli flag
+      logFilePrefix: `log-${delimiter}`, // rest of file name will be -<time-stamp>.log
+      logOutputDir: "./logs"
+    };
+    const signaleOptions = {}; // to remove ?
+    const log = await initLogger({ logOptions, signaleOptions }); // bunyanOptions
+    log.welcome();
+    log.start();
+    log.args({ delimiter, argsTaskCommand });
+    const taskCommandChosen =
+      command === "backup"
+        ? await execTaskBackup(argsTaskCommand, log)
+        : command === "presort"
+          ? await execTaskPresort(argsTaskCommand, log)
+          : command === "rename"
+            ? await execTaskRename(argsTaskCommand, log)
+            : throwNoCommandFound(command);
+    log.done();
+    const allLogs = log._returnLogs();
+    // console.log(JSON.stringify(allLogs, null, 2));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function throwNoCommandFound(command) {
+  throw new Error(`Not found this '${command}' command!`);
 }
 
 function chooseConfig(configName) {
