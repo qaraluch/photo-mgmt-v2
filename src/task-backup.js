@@ -6,9 +6,10 @@ const { getFileTimeStamp, chooseWhichPath } = require("./utils.js");
 const { getAllFiles } = require("./walker.js");
 const { archiveIt, spawnCheckArchive } = require("./archiver.js");
 
-async function runTaskBackup(args) {
+async function runTaskBackup(args, log) {
   try {
     const {
+      command,
       cwd,
       cu,
       cuBackup,
@@ -17,41 +18,41 @@ async function runTaskBackup(args) {
       outputDir,
       prefixArchiveName
     } = args;
+    log.startTask(command);
+    log.argsTask(command, {
+      cwd,
+      cu,
+      cuBackup,
+      checkArchive,
+      inputDir,
+      outputDir,
+      prefixArchiveName
+    });
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
-    console.log("Content of dir: ", inputPath);
+    // console.log("Content of dir: ", inputPath);
+    log.inputForBackup(inputPath);
     const outputPath = chooseWhichPath(outputDir, cuBackup, cwd);
     const walkOutput = await getAllFiles(inputPath);
-    console.log("walkOutput ", walkOutput[3]);
+    const numberFiles = walkOutput.length;
+    log.numberFiles(numberFiles);
     await makeDir(outputPath);
-    listReadFiles(walkOutput);
     const getPathsFilesToArchive = copyPathsForBackup(walkOutput);
     const backupFile = constructBackupFileName(prefixArchiveName, inputPath);
     const backupFilePath = path.resolve(outputPath, backupFile);
-    console.log("About to create zip file:");
-    console.log(` ${backupFile}`);
-    console.log("in:");
-    console.log(` ${outputPath}`);
-    await archiveIt(backupFilePath, getPathsFilesToArchive);
-    if (checkArchive) {
-      console.log("Checking archive file: ...");
-      const stdoutCommunicate = await spawnCheckArchive(backupFilePath);
-      console.log(stdoutCommunicate);
-    }
-    return;
+    log.outputForBackup(outputPath, backupFile, backupFilePath);
+    const ilog = log.startZipping();
+    // console.log("ilog ", ilog);
+    // await archiveIt(backupFilePath, getPathsFilesToArchive);
+    log.endZipping(ilog);
+    // if (checkArchive) {
+    //   console.log("Checking archive file: ...");
+    //   const stdoutCommunicate = await spawnCheckArchive(backupFilePath);
+    //   console.log(stdoutCommunicate);
+    // }
+    // return;
   } catch (error) {
     console.error(error);
   }
-}
-
-function listReadFiles(walkOutput) {
-  console.log("Read files:");
-  listFiles(walkOutput);
-}
-
-function listFiles(walkOutput) {
-  walkOutput.forEach(item => {
-    console.log("-->", item.name);
-  });
 }
 
 function copyPathsForBackup(walkOutput) {

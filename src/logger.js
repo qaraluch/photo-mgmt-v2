@@ -120,13 +120,21 @@ async function initLogger(initOptions = {}) {
     msg: msg_4l(msger, logger),
     welcome: welcome_4l(msger, logger),
     args: args_4l(msger, logger),
-    start: start_4l(msger, logger)
+    argsTask: argsTask_4l(msger, logger),
+    start: start_4l(msger, logger),
+    startTask: startTask_4l(msger, logger),
+    inputForBackup: inputForBackup_4l(msger, logger),
+    numberFiles: numberFiles_4l(msger, logger),
+    outputForBackup: outputForBackup_4l(msger, logger),
+    startZipping: startZipping_4l(msger, logger),
+    endZipping: endZipping_4l(logger) //interactive signale uses startZipping msger
   };
 }
 
 // Messages helpers
 const colorWith = color => msg => `${chalk[color](msg)}`;
 const delimitWith = delimiter => msg => `${delimiter}${msg}`;
+const addTab = () => " ".repeat(13);
 const configSignaleNoDecorations = {
   displayLabel: false,
   displayBadge: false,
@@ -153,7 +161,6 @@ const putBanner = (msger, banner) => {
 // ------------------------------------ MSG: done
 const doneMsg = "DONE!";
 const doneColor = "green";
-
 function done_4l(msger, logger) {
   return () => {
     msger.success(colorWith(doneColor)(doneMsg));
@@ -165,7 +172,6 @@ function done_4l(msger, logger) {
 function msg_4ui(msger) {
   return msg => msger.log(msg);
 }
-
 function msg_4l(msger, logger) {
   return msg => {
     msger.log(msg);
@@ -179,32 +185,100 @@ const welcomeTxt = "Welcome to:";
 const welcomeMgs = `\n ${figlet.textSync(bannerTxt, "Stampate")}`;
 const authorTxt = "                v.2 - by qaraluch (2018)";
 const welcomeColor = "green";
-
 function welcome_4l(msger) {
   return () => {
-    putSpaces(msger, 1);
     msger.log(welcomeTxt);
     putBanner(msger, colorWith(welcomeColor)(welcomeMgs));
     putBanner(msger, colorWith("gray")(authorTxt));
+    putSpaces(msger, 1);
   };
 }
 
 // ------------------------------------ MSG: args
-const argsMsg =
-  "Resolved arguments passed to script from cli, manualrun or config.";
-
+const argsMsg = "Resolved arguments passed to script from cli and config.";
 function args_4l(msger, logger) {
   return args => {
     logger.info(args, argsMsg);
   };
 }
 
+// ------------------------------------ MSG: args - task
+const argsTaskMsg = "Used arguments by task: %s";
+function argsTask_4l(msger, logger) {
+  return (task, args) => {
+    logger.info({ taskArgs: args }, argsTaskMsg, task);
+  };
+}
+
 // ------------------------------------ MSG: start
 const startMsg = "Started script!";
-
 function start_4l(msger, logger) {
   return () => {
     logger.info(startMsg);
+  };
+}
+
+// ------------------------------------ MSG: start - task
+const startTaskMsg = "Started photo-mgmt task: %s";
+const startTaskColor = "yellow";
+function startTask_4l(msger, logger) {
+  return command => {
+    msger.start(`Task: ${colorWith(startTaskColor)(command)}`);
+    logger.info(startTaskMsg, command);
+  };
+}
+
+// ------------------------------------ MSG: input - backup
+const inputBackupMsg = "Will read files for backup in dir (inputPath): %s";
+function inputForBackup_4l(msger, logger) {
+  return path => {
+    msger.log(`${addTab()}... reading files in dir: ${path}`);
+    logger.info(inputBackupMsg, path);
+  };
+}
+
+// ------------------------------------ MSG: number files
+const numberFilesColor = "yellow";
+function numberFiles_4l(msger, logger) {
+  return number => {
+    msger.log(
+      `${addTab()}... read: ${colorWith(numberFilesColor)(number)} files`
+    );
+  };
+}
+
+// ------------------------------------ MSG: output - backup
+const outputBackupMsg = "Will save zip files to file (backupFilePath): %s";
+function outputForBackup_4l(msger, logger) {
+  return (path, zipName, fullPath) => {
+    msger.log(`${addTab()}... save zip file in dir: ${path}`);
+    msger.log(`${addTab()}... as file: ${zipName}`);
+    logger.info(outputBackupMsg, fullPath);
+  };
+}
+
+// ------------------------------------ MSG: start - zipping
+const startZippingTaskMsg = "Started photo-mgmt backup zipping...";
+// const startZippingTaskColor = "yellow";
+function startZipping_4l(msger, logger) {
+  return () => {
+    //workaround:
+    const oldScope = msger._scopeName;
+    const nmsger = msger.scope(oldScope);
+    nmsger._interactive = true;
+    nmsger.log(`${addTab()}... zipping: ...`);
+    logger.info(startZippingTaskMsg);
+    return nmsger;
+  };
+}
+
+// ------------------------------------ MSG: end - zipping
+const endZippingTaskMsg = "End zipping...";
+function endZipping_4l(logger) {
+  return imsger => {
+    //workaround:
+    imsger.log(`${addTab()}... zipping: DONE!`);
+    logger.info(endZippingTaskMsg);
   };
 }
 

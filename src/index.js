@@ -65,7 +65,8 @@ async function runThis(taskCommand) {
             : throwNoCommandFound(command);
     log.done();
     const allLogs = log._returnLogs();
-    // console.log(JSON.stringify(allLogs, null, 2));
+    const poped = allLogs.slice(-2, -1);
+    console.log(JSON.stringify(poped, null, 2));
   } catch (error) {
     console.log(error);
   }
