@@ -2,7 +2,7 @@
 const path = require("path");
 const makeDir = require("make-dir");
 
-const { getFileTimeStamp, chooseWhichPath } = require("./utils.js");
+const { getFileTimeStamp, chooseWhichPath, hookStdout } = require("./utils.js");
 const { getAllFiles } = require("./walker.js");
 const { archiveIt, spawnCheckArchive } = require("./archiver.js");
 
@@ -41,9 +41,14 @@ async function runTaskBackup(args, log) {
     const backupFilePath = path.resolve(outputPath, backupFile);
     log.outputForBackup(outputPath, backupFile, backupFilePath);
     const ilog = log.startZipping();
-    // console.log("ilog ", ilog);
-    // await archiveIt(backupFilePath, getPathsFilesToArchive);
+    const zipStdout = [];
+    const unhookStdOut = hookStdout((string, enc, fd) => {
+      zipStdout.push(string);
+    });
+    await archiveIt(backupFilePath, getPathsFilesToArchive);
+    unhookStdOut();
     log.endZipping(ilog);
+    log.showZipSize(zipStdout);
     // if (checkArchive) {
     //   console.log("Checking archive file: ...");
     //   const stdoutCommunicate = await spawnCheckArchive(backupFilePath);

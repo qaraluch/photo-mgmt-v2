@@ -16,6 +16,8 @@ const bunyan = require("bunyan");
 const makeDir = require("make-dir");
 //[sindresorhus/make-dir: Make a directory and its parents if needed - Think `mkdir -p`](https://github.com/sindresorhus/make-dir)
 
+const prettyBytes = require("pretty-bytes");
+
 const { getFileTimeStamp } = require("./utils.js");
 
 const defaultLogOptions = {
@@ -127,7 +129,8 @@ async function initLogger(initOptions = {}) {
     numberFiles: numberFiles_4l(msger, logger),
     outputForBackup: outputForBackup_4l(msger, logger),
     startZipping: startZipping_4l(msger, logger),
-    endZipping: endZipping_4l(logger) //interactive signale uses startZipping msger
+    endZipping: endZipping_4l(logger), //interactive signale uses startZipping msger
+    showZipSize: showZipSize_4l(msger, logger)
   };
 }
 
@@ -279,6 +282,18 @@ function endZipping_4l(logger) {
     //workaround:
     imsger.log(`${addTab()}... zipping: DONE!`);
     logger.info(endZippingTaskMsg);
+  };
+}
+
+// ------------------------------------ MSG: show zip size
+const showZipSizeMsg = "Zip size: %s";
+function showZipSize_4l(msger, logger) {
+  return rawZipStdout => {
+    // raw: 119874223 total bytes\n
+    const size = parseInt(rawZipStdout[0].split(" ")[0]);
+    const prettySize = prettyBytes(size);
+    msger.log(`${addTab()}... zip size: ${prettySize}  `);
+    logger.info({ zipSizeBytes: size }, showZipSizeMsg, prettySize);
   };
 }
 
