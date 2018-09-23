@@ -69,6 +69,7 @@ function chooseWhichPath(flagPath, configPath, cwdPath) {
   return chosen;
 }
 
+//TODO: remove it ?
 function hookStdout(cb) {
   var oldStdout = process.stdout.write;
   process.stdout.write = (function() {

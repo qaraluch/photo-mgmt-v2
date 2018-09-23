@@ -278,9 +278,7 @@ function endZipping_4l(logger) {
 
 // ------------------------------------ MSG: show zip size
 function showZipSize_4l(msger, logger) {
-  return rawZipStdout => {
-    // the line: 119874223 total bytes\n
-    const size = parseInt(rawZipStdout[0].split(" ")[0]);
+  return size => {
     const prettySize = prettyBytes(size);
     msger.log(`${addTab()}... zip size: ${prettySize}  `);
     logger.info({ zipSizeBytes: size }, "Zip size: %s", prettySize);

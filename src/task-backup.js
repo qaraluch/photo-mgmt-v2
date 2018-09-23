@@ -29,7 +29,6 @@ async function runTaskBackup(args, log) {
       prefixArchiveName
     });
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
-    // console.log("Content of dir: ", inputPath);
     log.inputForBackup(inputPath);
     const outputPath = chooseWhichPath(outputDir, cuBackup, cwd);
     const walkOutput = await getAllFiles(inputPath);
@@ -41,20 +40,18 @@ async function runTaskBackup(args, log) {
     const backupFilePath = path.resolve(outputPath, backupFile);
     log.outputForBackup(outputPath, backupFile, backupFilePath);
     const ilog = log.startZipping();
-    const zipStdout = [];
-    const unhookStdOut = hookStdout((string, enc, fd) => {
-      zipStdout.push(string);
-    });
-    await archiveIt(backupFilePath, getPathsFilesToArchive);
-    unhookStdOut();
+    const zipSizeBytes = await archiveIt(
+      backupFilePath,
+      getPathsFilesToArchive
+    );
     log.endZipping(ilog);
-    log.showZipSize(zipStdout);
+    log.showZipSize(zipSizeBytes);
     // if (checkArchive) {
-    //   console.log("Checking archive file: ...");
+    //   log.checkZipArchive();
     //   const stdoutCommunicate = await spawnCheckArchive(backupFilePath);
     //   console.log(stdoutCommunicate);
     // }
-    // return;
+    return;
   } catch (error) {
     console.error(error);
   }
