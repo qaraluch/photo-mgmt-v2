@@ -131,7 +131,9 @@ async function initLogger(initOptions = {}) {
     outputForBackup: outputForBackup_4l(msger, logger),
     startZipping: startZipping_4l(msger, logger),
     endZipping: endZipping_4l(logger), //interactive signale uses startZipping msger
-    showZipSize: showZipSize_4l(msger, logger)
+    showZipSize: showZipSize_4l(msger, logger),
+    checkZipArchive: checkZipArchive_4l(msger, logger),
+    checkStdoutLogs: checkStdoutLogs_4l(msger, logger)
   };
 }
 
@@ -282,6 +284,25 @@ function showZipSize_4l(msger, logger) {
     const prettySize = prettyBytes(size);
     msger.log(`${addTab()}... zip size: ${prettySize}  `);
     logger.info({ zipSizeBytes: size }, "Zip size: %s", prettySize);
+  };
+}
+
+// ------------------------------------ MSG: check zip file
+function checkZipArchive_4l(msger, logger) {
+  return () => {
+    msger.info("... checking zip file");
+    logger.info("Checking zip file was performed");
+  };
+}
+
+// ------------------------------------ MSG: check zip logs
+function checkStdoutLogs_4l(msger, logger) {
+  return stdout => {
+    const split = stdout.split("\n");
+    const cut = split.slice(-3, split.length);
+    msger.log(`${addTab()}    (...)`);
+    cut.forEach(line => msger.log(`${addTab()}    - ${line}`));
+    logger.info({ checkZipLogs: split }, "Logs of zip archive checking");
   };
 }
 

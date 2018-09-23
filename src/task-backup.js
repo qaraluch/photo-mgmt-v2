@@ -2,7 +2,7 @@
 const path = require("path");
 const makeDir = require("make-dir");
 
-const { getFileTimeStamp, chooseWhichPath, hookStdout } = require("./utils.js");
+const { getFileTimeStamp, chooseWhichPath } = require("./utils.js");
 const { getAllFiles } = require("./walker.js");
 const { archiveIt, spawnCheckArchive } = require("./archiver.js");
 
@@ -46,11 +46,11 @@ async function runTaskBackup(args, log) {
     );
     log.endZipping(ilog);
     log.showZipSize(zipSizeBytes);
-    // if (checkArchive) {
-    //   log.checkZipArchive();
-    //   const stdoutCommunicate = await spawnCheckArchive(backupFilePath);
-    //   console.log(stdoutCommunicate);
-    // }
+    if (checkArchive) {
+      log.checkZipArchive();
+      const stdoutLogs = await spawnCheckArchive(backupFilePath);
+      log.checkStdoutLogs(stdoutLogs);
+    }
     return;
   } catch (error) {
     console.error(error);
