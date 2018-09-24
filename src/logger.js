@@ -119,6 +119,7 @@ async function initLogger(initOptions = {}) {
   };
   return {
     _returnLogs: returnRingbuffer,
+    //generic
     done: done_4l(msger, logger),
     msg: msg_4l(msger, logger),
     welcome: welcome_4l(msger, logger),
@@ -126,14 +127,19 @@ async function initLogger(initOptions = {}) {
     argsTask: argsTask_4l(msger, logger),
     start: start_4l(msger, logger),
     startTask: startTask_4l(msger, logger),
-    inputForBackup: inputForBackup_4l(msger, logger),
+    inputDir: inputDir_4l(msger, logger),
     numberFiles: numberFiles_4l(msger, logger),
+    dryRun: dryRun_4l(msger, logger),
+    //backup task
     outputForBackup: outputForBackup_4l(msger, logger),
     startZipping: startZipping_4l(msger, logger),
     endZipping: endZipping_4l(logger), //interactive signale uses startZipping msger
     showZipSize: showZipSize_4l(msger, logger),
     checkZipArchive: checkZipArchive_4l(msger, logger),
-    checkStdoutLogs: checkStdoutLogs_4l(msger, logger)
+    checkStdoutLogs: checkStdoutLogs_4l(msger, logger),
+    //presort taks
+    outputDirForMove: outputDirForMove_4l(msger, logger),
+    renamedFiles: renamedFiles_4l(msger, logger)
   };
 }
 
@@ -232,11 +238,13 @@ function startTask_4l(msger, logger) {
   };
 }
 
-// ------------------------------------ MSG: input - backup
-function inputForBackup_4l(msger, logger) {
-  return path => {
+// ------------------------------------ MSG: input dir
+function inputDir_4l(msger, logger) {
+  return (path, commandName) => {
     msger.log(`${addTab()}... reading files in dir: ${path}`);
-    logger.info("Will read files for backup in dir (inputPath): %s", path);
+    logger.info(
+      `Will read files for ${commandName} in dir (inputPath): ${path}`
+    );
   };
 }
 
@@ -303,6 +311,47 @@ function checkStdoutLogs_4l(msger, logger) {
     msger.log(`${addTab()}    (...)`);
     cut.forEach(line => msger.log(`${addTab()}    - ${line}`));
     logger.info({ checkZipLogs: split }, "Logs of zip archive checking");
+  };
+}
+
+// ------------------------------------ MSG: output for move
+function outputDirForMove_4l(msger, logger) {
+  return outputPath => {
+    msger.log(`${addTab()}... move files to dir: ${outputPath}`);
+    logger.info("Moved files to dir (outputPath): %s", outputPath);
+  };
+}
+
+// ------------------------------------ MSG: renamedFiles
+function renamedFiles_4l(msger, logger) {
+  return renamedFiles => {
+    // <- renamed walkOutput arr of objects
+    const pairs = renamedFiles.map(itm => ({
+      old: itm.oldName,
+      new: itm.newName
+    }));
+    const longestOldName = pairs.reduce(
+      (acc, next) => (next.old.length > acc ? next.old.length : acc),
+      0
+    );
+    const calcSpace = str => " ".repeat(longestOldName - str.length);
+    msger.info("Renamed files:");
+    pairs.forEach(pair =>
+      msger.log(`   ${pair.old}${calcSpace(pair.old)} - ${pair.new}`)
+    );
+    logger.info({ presortRename: pairs }, "Renamed files by presort script");
+  };
+}
+
+// ------------------------------------ MSG: dry run
+function dryRun_4l(msger, logger) {
+  return () => {
+    msger.warn(
+      `In ${colorWith("yellow")(
+        "dry run"
+      )} mode. All operations on filesystem turned off`
+    );
+    logger.warn("Dry run mode on.");
   };
 }
 

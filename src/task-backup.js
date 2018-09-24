@@ -29,7 +29,7 @@ async function runTaskBackup(args, log) {
       prefixArchiveName
     });
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
-    log.inputForBackup(inputPath);
+    log.inputDir(inputPath, "presort");
     const outputPath = chooseWhichPath(outputDir, cuBackup, cwd);
     const walkOutput = await getAllFiles(inputPath);
     const numberFiles = walkOutput.length;

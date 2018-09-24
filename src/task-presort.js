@@ -6,45 +6,41 @@ const { doRenameFilesForPresort } = require("./rename.js");
 const { moveFilesTo } = require("./move-files.js");
 const { chooseWhichPath, getFileTimeStamp } = require("./utils.js");
 
-async function runTaskPresort(args) {
+async function runTaskPresort(args, log) {
   try {
-    const { cwd, cu, cuPresort, dryRun, inputDir, outputDir } = args;
+    const { cwd, command, cu, cuPresort, dryRun, inputDir, outputDir } = args;
+    log.startTask(command);
+    log.argsTask(command, {
+      cwd,
+      cu,
+      cuPresort,
+      dryRun,
+      inputDir,
+      outputDir
+    });
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
+    log.inputDir(inputPath, "presort");
     const outputPath = chooseWhichPath(
       outputDir,
       cuPresort,
       `./temp-cu-presort-${getFileTimeStamp()}`
     );
     const walkOutput = await getAllFiles(inputPath);
+    const numberFiles = walkOutput.length;
+    log.numberFiles(numberFiles);
     await makeDir(outputPath);
-    listReadFiles(walkOutput);
-    console.log("\n About to rename files...");
     const renamedFiles = await doRenameFilesForPresort(walkOutput);
-    console.log("\n Moving files ...");
-    console.log(`   - to dir: ${outputPath}`);
+    log.renamedFiles(renamedFiles);
     if (dryRun) {
-      console.log("[!][ WARN ] Dry run mode. Not renaming files on disk. \n");
-      renamedFiles.forEach(item =>
-        console.log(item.oldName, " --> ", item.newName)
-      );
+      log.dryRun();
     } else {
+      log.outputDirForMove(outputPath);
       await moveFilesTo(renamedFiles, outputPath);
     }
     return;
   } catch (error) {
     console.error(error);
   }
-}
-
-function listReadFiles(walkOutput) {
-  console.log("Read files:");
-  listFiles(walkOutput);
-}
-
-function listFiles(walkOutput) {
-  walkOutput.forEach(item => {
-    console.log("-->", item.name);
-  });
 }
 
 module.exports = runTaskPresort;
