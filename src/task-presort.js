@@ -19,7 +19,7 @@ async function runTaskPresort(args, log) {
       outputDir
     });
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
-    log.inputDir(inputPath, "presort");
+    log.inputDir(inputPath, command);
     const outputPath = chooseWhichPath(
       outputDir,
       cuPresort,
@@ -30,7 +30,7 @@ async function runTaskPresort(args, log) {
     log.numberFiles(numberFiles);
     await makeDir(outputPath);
     const renamedFiles = await doRenameFilesForPresort(walkOutput);
-    log.renamedFiles(renamedFiles);
+    log.renamedFiles(renamedFiles, command);
     if (dryRun) {
       log.dryRun();
     } else {

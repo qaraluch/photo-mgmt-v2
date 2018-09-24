@@ -139,7 +139,10 @@ async function initLogger(initOptions = {}) {
     checkStdoutLogs: checkStdoutLogs_4l(msger, logger),
     //presort taks
     outputDirForMove: outputDirForMove_4l(msger, logger),
-    renamedFiles: renamedFiles_4l(msger, logger)
+    renamedFiles: renamedFiles_4l(msger, logger),
+    //rename task
+    excludedDirs: excludedDirs_4l(msger, logger),
+    renameInPlace: renameInPlace_4l(msger, logger)
   };
 }
 
@@ -324,7 +327,7 @@ function outputDirForMove_4l(msger, logger) {
 
 // ------------------------------------ MSG: renamedFiles
 function renamedFiles_4l(msger, logger) {
-  return renamedFiles => {
+  return (renamedFiles, task) => {
     // <- renamed walkOutput arr of objects
     const pairs = renamedFiles.map(itm => ({
       old: itm.oldName,
@@ -339,7 +342,7 @@ function renamedFiles_4l(msger, logger) {
     pairs.forEach(pair =>
       msger.log(`   ${pair.old}${calcSpace(pair.old)} - ${pair.new}`)
     );
-    logger.info({ presortRename: pairs }, "Renamed files by presort script");
+    logger.info({ presortRename: pairs }, `Renamed files by ${task} script`);
   };
 }
 
@@ -352,6 +355,27 @@ function dryRun_4l(msger, logger) {
       )} mode. All operations on filesystem turned off`
     );
     logger.warn("Dry run mode on.");
+  };
+}
+
+// ------------------------------------ MSG: excluded dir
+function excludedDirs_4l(msger, logger) {
+  return (excludedDirs, parsedExcludedDirs) => {
+    msger.log(
+      `${addTab()}... those dirs will be excluded from rename task: ${excludedDirs}`
+    );
+    logger.info(
+      { parsedExcludedDirs: parsedExcludedDirs },
+      "Exclude dirs from rename task (excludedDirs): %s",
+      excludedDirs
+    );
+  };
+}
+
+// ------------------------------------ MSG: rename in place
+function renameInPlace_4l(msger, logger) {
+  return () => {
+    msger.log(`${addTab()}... renamed files in place.`);
   };
 }
 
