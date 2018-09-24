@@ -121,6 +121,7 @@ async function initLogger(initOptions = {}) {
     _returnLogs: returnRingbuffer,
     //generic
     done: done_4l(msger, logger),
+    error: error_4l(msger, logger),
     msg: msg_4l(msger, logger),
     welcome: welcome_4l(msger, logger),
     args: args_4l(msger, logger),
@@ -179,6 +180,14 @@ function done_4l(msger, logger) {
   return () => {
     msger.success(colorWith("green")(doneMsg));
     logger.info(doneMsg);
+  };
+}
+
+// ------------------------------------ MSG: error
+function error_4l(msger, logger) {
+  return error => {
+    msger.error(error);
+    logger.info({ error }, "Error occurred!");
   };
 }
 

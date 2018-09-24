@@ -53,7 +53,7 @@ async function runTaskBackup(args, log) {
     }
     return;
   } catch (error) {
-    console.error(error);
+    log.error(error);
   }
 }
 

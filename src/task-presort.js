@@ -39,7 +39,7 @@ async function runTaskPresort(args, log) {
     }
     return;
   } catch (error) {
-    console.error(error);
+    log.error(error);
   }
 }
 

@@ -37,8 +37,8 @@ const configCU = {
 };
 
 async function runThis(taskCommand) {
+  const delimiter = "photo-mgmt";
   try {
-    const delimiter = "photo-mgmt";
     const cwd = { cwd: process.cwd() };
     const { command, config } = taskCommand;
     const configChosen = chooseConfig(config);
@@ -65,10 +65,11 @@ async function runThis(taskCommand) {
             : throwNoCommandFound(command);
     log.done();
     const allLogs = log._returnLogs();
+    // temp:
     const poped = allLogs.slice(-2, -1);
     console.log(JSON.stringify(poped, null, 2));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
