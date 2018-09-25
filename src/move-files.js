@@ -8,7 +8,6 @@ async function moveFilesTo(filesInfo, destination) {
   async function renameFiles(item) {
     const destinationPath = path.resolve(destination, item.newName);
     await moveFile(item.path, destinationPath, options);
-    console.log("    -->", `to: ${destinationPath}`);
     return;
   }
   const promises = filesInfo.map(throat(4, renameFiles, Promise.resolve()));

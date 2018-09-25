@@ -4,7 +4,7 @@ const execTaskBackup = require("./task-backup.js");
 const execTaskPresort = require("./task-presort.js");
 const execTaskRename = require("./task-rename.js");
 const { resolveOptions } = require("./utils.js");
-const { initLogger, initUiLogger } = require("./logger.js");
+const { initLogger } = require("./logger.js"); //initUiLogger
 
 //configs:
 const configTest = {
@@ -36,22 +36,30 @@ const configCU = {
     "_camera-save, _filmiki, _grafa_assets, _luzne, _modyf, _ogolne, _org, _piony, _rys_duplikaty, _slides-ep, _slides-nasze, _temp"
 };
 
+const delimiter = "photo-mgmt";
+
 async function runThis(taskCommand) {
-  const delimiter = "photo-mgmt";
   try {
     const cwd = { cwd: process.cwd() };
     const { command, config } = taskCommand;
     const configChosen = chooseConfig(config);
     const argsTaskCommand = resolveOptions({}, cwd, configChosen, taskCommand);
+    const {
+      silent,
+      disableFileLogs,
+      logFilePrefix,
+      logOutputDir
+    } = argsTaskCommand;
+    const resolvedLogFilePrefix =
+      logFilePrefix || `log-${delimiter}-${command}`;
     const logOptions = {
       delimiter,
-      silent: false, //TODO: add cli flag
-      disableFileLogs: true, //TODO: add cli flag
-      logFilePrefix: `log-${delimiter}`, // rest of file name will be -<time-stamp>.log
-      logOutputDir: "./logs"
+      silent,
+      disableFileLogs,
+      logFilePrefix: resolvedLogFilePrefix,
+      logOutputDir
     };
-    const signaleOptions = {}; // to remove ?
-    const log = await initLogger({ logOptions, signaleOptions }); // bunyanOptions
+    const log = await initLogger({ logOptions }); // bunyanOptions signaleOptions
     log.welcome();
     log.start();
     log.args({ delimiter, argsTaskCommand });
@@ -64,10 +72,6 @@ async function runThis(taskCommand) {
             ? await execTaskRename(argsTaskCommand, log)
             : throwNoCommandFound(command);
     log.done();
-    const allLogs = log._returnLogs();
-    // temp:
-    const poped = allLogs.slice(-2, -1);
-    console.log(JSON.stringify(poped, null, 2));
   } catch (error) {
     console.error(error);
   }
@@ -93,9 +97,6 @@ function runFromCli(args) {
   const cliCommand = args.input[0];
   const flags = args.flags;
   const command = Object.assign({}, { command: cliCommand }, flags);
-  // console.log("-->", args.input);
-  // console.log("-->", args.flags);
-  // console.log("command ", command);
   runThis(command);
 }
 
