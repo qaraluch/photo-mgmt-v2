@@ -69,6 +69,19 @@ function chooseWhichPath(flagPath, configPath, cwdPath) {
   return chosen;
 }
 
+//TODO: remove it ?
+function hookStdout(cb) {
+  var oldStdout = process.stdout.write;
+  process.stdout.write = (function() {
+    return function(string, encoding, fd) {
+      cb(string, encoding, fd);
+    };
+  })(process.stdout.write);
+  return function() {
+    process.stdout.write = oldStdout;
+  };
+}
+
 module.exports = {
   getFileTimeStamp,
   regexFileName,
@@ -79,5 +92,6 @@ module.exports = {
   checkIfOneStringIncludesNext,
   prependStringWithHyphen,
   resolveOptions,
-  chooseWhichPath
+  chooseWhichPath,
+  hookStdout
 };

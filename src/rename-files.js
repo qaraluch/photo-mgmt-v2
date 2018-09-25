@@ -1,6 +1,8 @@
+const path = require("path");
+
 const fs = require("fs-extra");
 //[jprichardson/node-fs-extra: Node.js: extra methods for the fs object like copy(), remove(), mkdirs()](https://github.com/jprichardson/node-fs-extra)
-const path = require("path");
+
 const throat = require("throat");
 //[ForbesLindesay/throat: Throttle a collection of promise returning functions](https://github.com/ForbesLindesay/throat)
 
@@ -12,12 +14,13 @@ async function renameFiles(filesInfo) {
     if (item.path !== destinationPath) {
       try {
         await fs.move(item.path, destinationPath);
-        console.log("    -->", `to: ${destinationPath}`);
       } catch (error) {
-        console.error("\n [!] Sth went wrong with rename-files: ");
-        console.error(`       - ${error}`);
-        console.error(`       - for file: ${item.path}`);
-        console.error("       - Skipped rename!\n");
+        throw new Error(
+          `[!] Sth went wrong with rename-files: \n
+           - ${error}
+           - for file: ${item.path}
+           - Skipped rename!`
+        );
       }
     }
     return;

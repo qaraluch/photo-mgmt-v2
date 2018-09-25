@@ -5,9 +5,10 @@ const { addTag } = require("./rename.js");
 const { renameFiles } = require("./rename-files.js");
 const { parseExcludeDirs, chooseWhichPath } = require("./utils.js");
 
-async function runTaskRename(args) {
+async function runTaskRename(args, log) {
   try {
     const {
+      command,
       cwd,
       cuPresort,
       tag,
@@ -16,53 +17,39 @@ async function runTaskRename(args) {
       inputDir,
       excludeDirs
     } = args;
+    log.startTask(command);
+    log.argsTask(command, {
+      cwd,
+      cuPresort,
+      tag,
+      renameAfterParentDir,
+      dryRun,
+      inputDir,
+      excludeDirs
+    });
     let parsedExcludeDirs;
+    const inputPath = chooseWhichPath(inputDir, cuPresort, cwd);
+    log.inputDir(inputPath, command);
     if (excludeDirs) {
       parsedExcludeDirs = parseExcludeDirs(excludeDirs);
-      listExcludedDirs(parsedExcludeDirs);
+      log.excludedDirs(excludeDirs, parsedExcludeDirs);
     }
-    const inputPath = chooseWhichPath(inputDir, cuPresort, cwd);
     let walkOutput = await getAllFiles(inputPath, parsedExcludeDirs);
+    const numberFiles = walkOutput.length;
+    log.numberFiles(numberFiles);
     //TODO: check if cuPresort or inputDir exists
-    listReadFiles(walkOutput);
-    if (inputDir || inputDir === "") {
-      console.log("\n[!] Passed custom input dir...");
-      console.log(inputPath);
-    }
-    console.log("\n About to rename files...");
     const renamedFiles = addTag(walkOutput, tag, renameAfterParentDir);
+    log.renamedFiles(renamedFiles, command);
     if (dryRun) {
-      console.log("[!][ WARN ] Dry run mode. Not renaming files on disk. \n");
-      renamedFiles.forEach(item => {
-        if (item.oldName !== item.newName) {
-          console.log(item.oldName, " --> ", item.newName);
-        }
-      });
+      log.dryRun();
     } else {
+      log.renameInPlace();
       await renameFiles(renamedFiles);
     }
     return;
   } catch (error) {
-    console.error(error);
+    log.error(error);
   }
-}
-
-function listExcludedDirs(dirs) {
-  console.log("Excluded dirs:");
-  dirs.forEach(item => {
-    console.log("-->", item);
-  });
-}
-
-function listReadFiles(files) {
-  console.log("Read files:");
-  listFiles(files);
-}
-
-function listFiles(files) {
-  files.forEach(item => {
-    console.log("-->", item.name);
-  });
 }
 
 module.exports = runTaskRename;

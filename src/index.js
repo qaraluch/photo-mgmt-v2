@@ -4,6 +4,7 @@ const execTaskBackup = require("./task-backup.js");
 const execTaskPresort = require("./task-presort.js");
 const execTaskRename = require("./task-rename.js");
 const { resolveOptions } = require("./utils.js");
+const { initLogger } = require("./logger.js"); //initUiLogger
 
 //configs:
 const configTest = {
@@ -35,23 +36,50 @@ const configCU = {
     "_camera-save, _filmiki, _grafa_assets, _luzne, _modyf, _ogolne, _org, _piony, _rys_duplikaty, _slides-ep, _slides-nasze, _temp"
 };
 
+const delimiter = "photo-mgmt";
+
 async function runThis(taskCommand) {
-  const cwd = { cwd: process.cwd() };
-  const { command, config } = taskCommand;
-  const configChosen = chooseConfig(config);
-  console.log("configChosen ", configChosen.excludeDirs);
-  const argsTaskCommand = resolveOptions({}, cwd, configChosen, taskCommand);
-  console.log("About to run task...");
-  console.log(command);
-  const taskCommandChosen =
-    command === "backup"
-      ? await execTaskBackup(argsTaskCommand)
-      : command === "presort"
-        ? await execTaskPresort(argsTaskCommand)
-        : command === "rename"
-          ? await execTaskRename(argsTaskCommand)
-          : console.log(`Not found this '${command}' command!`);
-  console.log("DONE!");
+  try {
+    const cwd = { cwd: process.cwd() };
+    const { command, config } = taskCommand;
+    const configChosen = chooseConfig(config);
+    const argsTaskCommand = resolveOptions({}, cwd, configChosen, taskCommand);
+    const {
+      silent,
+      disableFileLogs,
+      logFilePrefix,
+      logOutputDir
+    } = argsTaskCommand;
+    const resolvedLogFilePrefix =
+      logFilePrefix || `log-${delimiter}-${command}`;
+    const logOptions = {
+      delimiter,
+      silent,
+      disableFileLogs,
+      logFilePrefix: resolvedLogFilePrefix,
+      logOutputDir
+    };
+    const log = await initLogger({ logOptions }); // bunyanOptions signaleOptions
+    log.welcome();
+    log.start();
+    log.args({ delimiter, argsTaskCommand });
+    const taskCommandChosen =
+      command === "backup"
+        ? await execTaskBackup(argsTaskCommand, log)
+        : command === "presort"
+          ? await execTaskPresort(argsTaskCommand, log)
+          : command === "rename"
+            ? await execTaskRename(argsTaskCommand, log)
+            : throwNoCommandFound(command);
+    log.saveLogFile();
+    log.done();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function throwNoCommandFound(command) {
+  throw new Error(`Not found this '${command}' command!`);
 }
 
 function chooseConfig(configName) {
@@ -70,9 +98,6 @@ function runFromCli(args) {
   const cliCommand = args.input[0];
   const flags = args.flags;
   const command = Object.assign({}, { command: cliCommand }, flags);
-  // console.log("-->", args.input);
-  // console.log("-->", args.flags);
-  // console.log("command ", command);
   runThis(command);
 }
 

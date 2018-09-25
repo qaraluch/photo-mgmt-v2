@@ -47,6 +47,24 @@ const options = {
       type: "boolean",
       alias: "d",
       default: false
+    },
+    silent: {
+      type: "boolean",
+      alias: "s",
+      default: false
+    },
+    disableFileLogs: {
+      type: "boolean",
+      alias: "l",
+      default: false
+    },
+    logFilePrefix: {
+      type: "string",
+      default: undefined
+    },
+    logOutputDir: {
+      type: "string",
+      default: "."
     }
   }
 };
@@ -144,6 +162,18 @@ const args = meow(
 
     -e, --exclude-dirs <string>     Pass coma separated string with list of dirs to exclude for rename task.
                                     Default: undefined.
+
+    -s, --silent                    Disable all log mesagges in console.
+                                    Default: false.
+
+    -l, --disable-file-logs         Disable output of detailed log of tasks to file.
+                                    Default: false.
+
+    --log-file-prefix [string]      Define custom prefix of log file.
+                                    Default: 'log-photo-mgmt-<command>'.
+
+    --log-output-dir [path]         Define log files saving directory. 
+                                    Default: current working directory.
 
     Negate flags by using the --no- prefix.
 

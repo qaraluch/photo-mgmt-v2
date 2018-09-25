@@ -11,6 +11,12 @@ module.exports = {
         script: series(cleanNodeModules)
       }
     },
+    reset: {
+      default: {
+        description: "Reset all fixtures.",
+        script: concurrent.nps("test.resetFixtures", "test.resetFixturesRename")
+      }
+    },
     test: {
       default: {
         description: "ava test",

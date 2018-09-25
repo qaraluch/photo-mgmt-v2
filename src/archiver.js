@@ -1,7 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 const archiver = require("archiver");
+//[archiverjs/node-archiver: a streaming interface for archive generation](https://github.com/archiverjs/node-archiver)
+
 const execa = require("execa");
+//[sindresorhus/execa: A better `child_process`](https://github.com/sindresorhus/execa)
 
 function archiveIt(backupFilePath, toBackupFilesPaths) {
   return new Promise((resolve, reject) => {
@@ -10,23 +13,23 @@ function archiveIt(backupFilePath, toBackupFilesPaths) {
 
     output.on("close", function() {
       const size = archive.pointer();
-      console.log(size + " total bytes");
-      console.log(
-        "archiver has been finalized and the output file descriptor has closed."
-      );
       resolve(size);
     });
 
-    output.on("end", function() {
-      console.log("Data has been drained");
-    });
+    // output.on("end", function() {
+    //   console.log("Data has been drained");
+    // });
+
+    // archive.on("warning", function(err) {
+    //   if (err.code === "ENOENT") {
+    //     console.log("Some ENOENT");
+    //   } else {
+    //     reject(err);
+    //   }
+    // });
 
     archive.on("warning", function(err) {
-      if (err.code === "ENOENT") {
-        console.log("Some ENOENT");
-      } else {
-        reject(err);
-      }
+      reject(err);
     });
 
     archive.on("error", function(err) {
