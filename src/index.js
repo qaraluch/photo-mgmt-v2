@@ -71,6 +71,7 @@ async function runThis(taskCommand) {
           : command === "rename"
             ? await execTaskRename(argsTaskCommand, log)
             : throwNoCommandFound(command);
+    log.saveLogFile();
     log.done();
   } catch (error) {
     console.error(error);

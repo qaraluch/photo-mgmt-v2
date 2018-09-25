@@ -131,6 +131,7 @@ async function initLogger(initOptions = {}) {
     inputDir: inputDir_4l(msger, logger),
     numberFiles: numberFiles_4l(msger, logger),
     dryRun: dryRun_4l(msger, logger),
+    saveLogFile: saveLogFile_4l(msger, logger),
     //backup task
     outputForBackup: outputForBackup_4l(msger, logger),
     startZipping: startZipping_4l(msger, logger),
@@ -329,7 +330,7 @@ function checkStdoutLogs_4l(msger, logger) {
 // ------------------------------------ MSG: output for move
 function outputDirForMove_4l(msger, logger) {
   return outputPath => {
-    msger.log(`${addTab()}... move files to dir: ${outputPath}`);
+    msger.log(`${addTab()}... moved files to dir: ${outputPath}`);
     logger.info("Moved files to dir (outputPath): %s", outputPath);
   };
 }
@@ -385,6 +386,21 @@ function excludedDirs_4l(msger, logger) {
 function renameInPlace_4l(msger, logger) {
   return () => {
     msger.log(`${addTab()}... renamed files in place.`);
+  };
+}
+
+// ------------------------------------ MSG: save log file
+function saveLogFile_4l(msger, logger) {
+  return () => {
+    const {
+      fields: { disableFileLogs },
+      streams
+    } = logger;
+    if (!disableFileLogs) {
+      const logPath = streams[0].path;
+      msger.log(`${addTab()}... saved log file to: ${logPath}`);
+      logger.info("Saved log to file: %s", logPath);
+    }
   };
 }
 
