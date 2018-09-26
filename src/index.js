@@ -1,75 +1,39 @@
 /* eslint-disable no-console */
-//task dependencies
 const execTaskBackup = require("./task-backup.js");
 const execTaskPresort = require("./task-presort.js");
 const execTaskRename = require("./task-rename.js");
-const { resolveOptions } = require("./utils.js");
 const { initLogger } = require("./logger.js"); //initUiLogger
+const resolveAllOptions = require("./config.js");
 
-//configs:
-const configTest = {
-  // Source dir Camera Upload from Dropbox
-  cu: "./test/fixtures/cu/",
-  // backup folder for CU
-  cuBackup: "./test/fixtures/cu-backup/",
-  // Destination Dir for cu-presort
-  cuPresort: "./test/fixtures/cu-presort/"
-};
-
-const configTestRename = {
-  // Source dir Camera Upload from Dropbox
-  cu: "./test/fixtures/cu/",
-  // backup folder for CU
-  cuBackup: "./test/fixtures/cu-backup/",
-  // Destination Dir for cu-presort
-  cuPresort: "./test/fixtures/cu-presort-rename/"
-};
-
-const configCU = {
-  // Source dir Camera Upload from Dropbox
-  cu: "/mnt/g/Dropbox/Camera Uploads/",
-  // backup folder for CU
-  cuBackup: "/mnt/g/.temp/cuBackup/",
-  // Destination Dir for cu-presort
-  cuPresort: "/mnt/g/Dropbox/mydrocsort/",
-  excludeDirs:
-    "_camera-save, _filmiki, _grafa_assets, _luzne, _modyf, _ogolne, _org, _piony, _rys_duplikaty, _slides-ep, _slides-nasze, _temp"
-};
-
-const delimiter = "photo-mgmt";
-
-async function runThis(taskCommand) {
+async function runThis(args) {
   try {
-    const cwd = { cwd: process.cwd() };
-    const { command, config } = taskCommand;
-    const configChosen = chooseConfig(config);
-    const argsTaskCommand = resolveOptions({}, cwd, configChosen, taskCommand);
+    const endOptions = resolveAllOptions(args);
     const {
+      command,
+      delimiter,
       silent,
       disableFileLogs,
       logFilePrefix,
       logOutputDir
-    } = argsTaskCommand;
-    const resolvedLogFilePrefix =
-      logFilePrefix || `log-${delimiter}-${command}`;
+    } = endOptions;
     const logOptions = {
       delimiter,
       silent,
       disableFileLogs,
-      logFilePrefix: resolvedLogFilePrefix,
+      logFilePrefix,
       logOutputDir
     };
     const log = await initLogger({ logOptions }); // bunyanOptions signaleOptions
     log.welcome();
     log.start();
-    log.args({ delimiter, argsTaskCommand });
+    log.args({ delimiter, endOptions });
     const taskCommandChosen =
       command === "backup"
-        ? await execTaskBackup(argsTaskCommand, log)
+        ? await execTaskBackup(endOptions, log)
         : command === "presort"
-          ? await execTaskPresort(argsTaskCommand, log)
+          ? await execTaskPresort(endOptions, log)
           : command === "rename"
-            ? await execTaskRename(argsTaskCommand, log)
+            ? await execTaskRename(endOptions, log)
             : throwNoCommandFound(command);
     log.saveLogFile();
     log.done();
@@ -80,18 +44,6 @@ async function runThis(taskCommand) {
 
 function throwNoCommandFound(command) {
   throw new Error(`Not found this '${command}' command!`);
-}
-
-function chooseConfig(configName) {
-  const chosen =
-    configName === "configTest"
-      ? configTest
-      : configName === "configTestRename"
-        ? configTestRename
-        : configName === "configCU"
-          ? configCU
-          : configTest;
-  return chosen;
 }
 
 function runFromCli(args) {
