@@ -14,7 +14,17 @@ module.exports = {
     reset: {
       default: {
         description: "Reset all fixtures.",
-        script: concurrent.nps("test.resetFixtures", "test.resetFixturesRename")
+        script: concurrent.nps(
+          "test.resetFixtures",
+          "test.resetFixturesRename",
+          "logs"
+        )
+      }
+    },
+    logs: {
+      default: {
+        description: "Remove all test logs.",
+        script: "rm -rf ./test/fixtures/logs"
       }
     },
     test: {

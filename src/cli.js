@@ -7,16 +7,16 @@ const options = {
   flags: {
     checkArchive: {
       type: "boolean",
-      default: true
+      default: undefined
     },
     prefixArchiveName: {
       type: "string",
-      default: "cu-temp-arch"
+      default: undefined
     },
     config: {
       type: "string",
       alias: "c",
-      default: "configTest"
+      default: undefined
     },
     tag: {
       type: "string",
@@ -26,7 +26,7 @@ const options = {
     renameAfterParentDir: {
       type: "boolean",
       alias: "r",
-      default: false
+      default: undefined
     },
     inputDir: {
       type: "string",
@@ -46,17 +46,17 @@ const options = {
     dryRun: {
       type: "boolean",
       alias: "d",
-      default: false
+      default: undefined
     },
     silent: {
       type: "boolean",
       alias: "s",
-      default: false
+      default: undefined
     },
     disableFileLogs: {
       type: "boolean",
       alias: "l",
-      default: false
+      default: undefined
     },
     logFilePrefix: {
       type: "string",
@@ -64,14 +64,14 @@ const options = {
     },
     logOutputDir: {
       type: "string",
-      default: "."
+      default: undefined
     }
   }
 };
 
 const args = meow(
   `
-  photoMgmt v.2
+  photo-mgmt v2
 
   Personal photo management scripts.
   
@@ -164,18 +164,16 @@ const args = meow(
                                     Default: undefined.
 
     -s, --silent                    Disable all log mesagges in console.
-                                    Default: false.
+                                    Default: no.
 
     -l, --disable-file-logs         Disable output of detailed log of tasks to file.
-                                    Default: false.
+                                    Default: no.
 
     --log-file-prefix [string]      Define custom prefix of log file.
                                     Default: 'log-photo-mgmt-<command>'.
 
     --log-output-dir [path]         Define log files saving directory. 
                                     Default: current working directory.
-
-    Negate flags by using the --no- prefix.
 
   Global options (overrides above)
     --help 
