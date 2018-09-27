@@ -7,7 +7,7 @@ const options = {
   flags: {
     checkArchive: {
       type: "boolean",
-      default: undefined
+      default: true // have to be here in order to work --no-check-archive
     },
     prefixArchiveName: {
       type: "string",
