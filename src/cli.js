@@ -84,14 +84,16 @@ const args = meow(
       - rename
     
   1. Backup
-     (Info...)
+     Simply zip up photos for temporary backup. Automatically performs 
+     simple zip archive check.
 
       Examples:
         photo-mgmt backup
-        photo-mgmt backup -c configCU
-        photo-mgmt backup --config configTest --no-check-archive
-        photo-mgmt backup --prefix-archive-name # get current dir name as prefix
+        photo-mgmt backup --config dev --no-check-archive
+        photo-mgmt backup -c dev-rename
         photo-mgmt backup --prefix-archive-name my-name
+        photo-mgmt backup --prefix-archive-name # get current dir name as prefix
+        photo-mgmt backup --input-dir "./test/fixtures/cu"
         photo-mgmt backup -i "./test/fixtures/cu"
         photo-mgmt backup -i #archive content of cwd 
         photo-mgmt backup --output-dir "./test/fixtures/custom-cu-presort"
@@ -99,12 +101,15 @@ const args = meow(
         photo-mgmt backup -o #save archive file in cwd
       
   2. Presort
-     (Info...)
+     This task normalize a photo file names to format as this 
+     '2018-08-17 11.11.43-0.jpg' example. For media files like: .jpg, 
+     .mp4 tries to get date information from EXIF meta data. In case files: 
+     .gif and .png files script get creation time to rename process.
 
       Examples:
         photo-mgmt presort
-        photo-mgmt presort --config configTest --dry-run
-        photo-mgmt presort -c configCU -d
+        photo-mgmt presort --dry-run
+        photo-mgmt presort -d
         photo-mgmt presort --input-dir "./test/fixtures/cu"
         photo-mgmt presort -i "./test/fixtures/cu"
         photo-mgmt presort -i #presort in cwd 
@@ -113,11 +118,13 @@ const args = meow(
         photo-mgmt presort -o #presort to temporary dir in cwd
 
   3. Rename
-     (Info...)
+     This task is meant to run after 'presort' script but it can perform basic 
+     normalize of photo names too. Main purpose of this task is to add descriptions 
+     (tag) to photo names. It can also add tag after parent dir name. 
 
       Examples:
         photo-mgmt rename -c configTestRename --tag myDir
-        photo-mgmt rename -c configTestRename -dt myDir
+        photo-mgmt rename -c configTestRename -t myDir
         photo-mgmt rename -c configTestRename --rename-after-parent-dir
         photo-mgmt rename -c configTestRename -r
         photo-mgmt rename -c configTestRename --input-dir "./test/fixtures/cu-presort-rename/some-dir/"
@@ -128,8 +135,8 @@ const args = meow(
 
   Options:
     -c, --config [name]             Pass in config name that specifies I/O dirs. See configs.
-                                    When no [name] variable is passed then (...)
-                                    Default: (...).
+                                    When no [name] variable is passed then default value is taken.
+                                    Default: dev (perform operations on test fixtures).
 
     --check-archive                 Perform backup task archive test.
                                     Default: yes.
@@ -163,14 +170,14 @@ const args = meow(
     -e, --exclude-dirs <string>     Pass coma separated string with list of dirs to exclude for rename task.
                                     Default: undefined.
 
-    -s, --silent                    Disable all log mesagges in console.
+    -s, --silent                    Disable all log messages in console.
                                     Default: no.
 
     -l, --disable-file-logs         Disable output of detailed log of tasks to file.
                                     Default: no.
 
     --log-file-prefix [string]      Define custom prefix of log file.
-                                    Default: 'log-photo-mgmt-<command>'.
+                                    Default: 'log-photo-mgmt-<task>'.
 
     --log-output-dir [path]         Define log files saving directory. 
                                     Default: current working directory.

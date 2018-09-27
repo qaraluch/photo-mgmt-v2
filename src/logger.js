@@ -320,7 +320,7 @@ function checkZipArchive_4l(msger, logger) {
 function checkStdoutLogs_4l(msger, logger) {
   return stdout => {
     const split = stdout.split("\n");
-    const cut = split.slice(-3, split.length);
+    const cut = split.slice(-8, split.length);
     msger.log(`${addTab()}    (...)`);
     cut.forEach(line => msger.log(`${addTab()}    - ${line}`));
     logger.info({ checkZipLogs: split }, "Logs of zip archive checking");
