@@ -1,6 +1,6 @@
 {
   "name": "photo-mgmt-v2",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "My personal photo management scripts.",
   "main": "src/index.js",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "url": "https://github.com/qaraluch/photo-mgmt-v2.git"
   },
   "files": [
-    "src/index.js"
+    "src/*.js"
   ],
   "bin": {
     "photo-mgmt": "src/cli.js"
