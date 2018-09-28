@@ -1,6 +1,6 @@
 {
   "name": "photo-mgmt-v2",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "My personal photo management scripts.",
   "main": "src/index.js",
   "license": "MIT",
