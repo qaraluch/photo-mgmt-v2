@@ -24,7 +24,7 @@ const getDateFromMetadata = passDateValue =>
 const correctExifDate = dateStr =>
   dateStr.replace(/^(\d{4}):(\d{2}):(\d{2})(.+)/, "$1-$2-$3$4");
 
-//ES9 / node.js ^10.3.0
+//ES9 - ES2018 - RegExp named capture groups - node.js ^10.3.0
 const regexFileName = /(?<date>\d{4}-\d{2}-\d{2}\s\d{2}\.\d{2}\.\d{2})(-)?(?<version>\d)?(\s)?([-|—])?(\s)?(?<comment>.+)?/;
 
 function parseExistedFileName(baseName) {
@@ -35,6 +35,11 @@ function parseExistedFileName(baseName) {
   const comment = commentRaw && commentRaw.trim();
   const resultObj = { date, version, comment };
   return resultObj;
+}
+
+function checkPropernessFileName(baseName) {
+  const result = regexFileName.test(baseName);
+  return result;
 }
 
 function parseExcludeDirs(strWithDirs) {
@@ -69,19 +74,6 @@ function chooseWhichPath(flagPath, configPath, cwdPath) {
   return chosen;
 }
 
-//TODO: remove it ?
-function hookStdout(cb) {
-  var oldStdout = process.stdout.write;
-  process.stdout.write = (function() {
-    return function(string, encoding, fd) {
-      cb(string, encoding, fd);
-    };
-  })(process.stdout.write);
-  return function() {
-    process.stdout.write = oldStdout;
-  };
-}
-
 module.exports = {
   getFileTimeStamp,
   regexFileName,
@@ -93,5 +85,5 @@ module.exports = {
   prependStringWithHyphen,
   resolveOptions,
   chooseWhichPath,
-  hookStdout
+  checkPropernessFileName
 };

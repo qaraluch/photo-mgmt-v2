@@ -7,12 +7,14 @@ const {
   getDateFromMetadata,
   correctExifDate,
   checkIfOneStringIncludesNext,
-  prependStringWithHyphen
+  prependStringWithHyphen,
+  checkPropernessFileName
 } = require("./utils.js");
 
 const getExt = fileName => path.parse(fileName).ext;
 const getName = fileName => path.parse(fileName).name;
 
+// presort task
 async function doRenameFilesForPresort(walkOutput) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
@@ -175,6 +177,7 @@ function putTogetherFileNameNonStandard(item) {
   return newName;
 }
 
+// rename task
 function addTag(walkOutput, tag, renameAfterParentDir) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const infoFromFileName = R.map(getInfoFromFileNameMapper, infoToRename);
@@ -201,7 +204,44 @@ const addParentDirAsTag = item => {
   return item;
 };
 
+// merge task
+function mergeRename(walkOutput) {
+  const infoToRename = pullInfoFromWalk(walkOutput);
+  const xform = R.compose(
+    R.map(getInfoFromFileNameMapper),
+    R.map(writeInfoIfProperNamed),
+    R.map(reassemblyFileName)
+  );
+  const transducer = R.into([], xform);
+  const infoRenamedWithDups = transducer(infoToRename);
+  const renamedFiles = bumpVersionOfDups(infoRenamedWithDups);
+  let leftOvers = []; // for not proper named files
+  const filterFilesNotProperNamedReducer = (acc, next) => {
+    if (checkPropernessFileName(next.oldName)) {
+      acc.push(next);
+      return acc;
+    } else {
+      leftOvers.push(next);
+      return acc;
+    }
+  };
+  const filteredFiles = R.reduce(
+    filterFilesNotProperNamedReducer,
+    [],
+    renamedFiles
+  );
+  return [filteredFiles, leftOvers];
+}
+
+function writeInfoIfProperNamed(item) {
+  checkPropernessFileName(item.oldName)
+    ? (item.ifProperNamed = true)
+    : (item.ifProperNamed = false);
+  return item;
+}
+
 module.exports = {
+  mergeRename,
   doRenameFilesForPresort,
   addTag
 };

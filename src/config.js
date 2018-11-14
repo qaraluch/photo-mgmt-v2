@@ -60,7 +60,12 @@ const configDev = {
   logOutputDir: "./test/fixtures/logs",
   cu: "./test/fixtures/cu/",
   cuBackup: "./test/fixtures/cu-backup/",
-  cuPresort: "./test/fixtures/cu-presort/"
+  cuPresort: "./test/fixtures/cu-presort/",
+  mergedDirName: "./test/fixtures/merge/merged",
+  mergeDirsInput: [
+    "./test/fixtures/merge/merge-a/",
+    "./test/fixtures/merge/merge-b/"
+  ]
 };
 
 const configDevRename = {

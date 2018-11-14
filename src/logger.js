@@ -129,6 +129,7 @@ async function initLogger(initOptions = {}) {
     start: start_4l(msger, logger),
     startTask: startTask_4l(msger, logger),
     inputDir: inputDir_4l(msger, logger),
+    inputDirs: inputDirs_4l(msger, logger),
     numberFiles: numberFiles_4l(msger, logger),
     dryRun: dryRun_4l(msger, logger),
     saveLogFile: saveLogFile_4l(msger, logger),
@@ -142,6 +143,8 @@ async function initLogger(initOptions = {}) {
     //presort taks
     outputDirForMove: outputDirForMove_4l(msger, logger),
     renamedFiles: renamedFiles_4l(msger, logger),
+    mergeFiles: mergeFiles_4l(msger, logger),
+    notMergeFiles: notMergeFiles_4l(msger, logger),
     //rename task
     excludedDirs: excludedDirs_4l(msger, logger),
     renameInPlace: renameInPlace_4l(msger, logger)
@@ -261,6 +264,17 @@ function inputDir_4l(msger, logger) {
   };
 }
 
+// ------------------------------------ MSG: input dirs
+function inputDirs_4l(msger, logger) {
+  return (paths, commandName) => {
+    msger.log(`${addTab()}... reading files in dirs:`);
+    paths.forEach(path => msger.log(`${addTab()}    - ${path}`));
+    logger.info(
+      `Will read files for ${commandName} in dir (inputPath): ${paths}`
+    );
+  };
+}
+
 // ------------------------------------ MSG: number files
 function numberFiles_4l(msger) {
   return number => {
@@ -338,7 +352,7 @@ function outputDirForMove_4l(msger, logger) {
 // ------------------------------------ MSG: renamedFiles
 function renamedFiles_4l(msger, logger) {
   return (renamedFiles, task) => {
-    // <- renamed walkOutput arr of objects
+    // <- array of modified walkOutput items
     const pairs = renamedFiles.map(itm => ({
       old: itm.oldName,
       new: itm.newName
@@ -352,7 +366,36 @@ function renamedFiles_4l(msger, logger) {
     pairs.forEach(pair =>
       msger.log(`   ${pair.old}${calcSpace(pair.old)} - ${pair.new}`)
     );
-    logger.info({ presortRename: pairs }, `Renamed files by ${task} script`);
+    logger.info({ renamedFiles: pairs }, `Renamed files by ${task} script`);
+  };
+}
+
+// ------------------------------------ MSG: mergeFiles
+function mergeFiles_4l(msger, logger) {
+  return (mergedItems, outputDir, task) => {
+    // <- array of modified walkOutput items
+    const names = mergedItems.map(itm => itm.newName);
+    msger.info(`Merged files into dir ${outputDir}:`);
+    names.forEach(name => msger.log(`${addTab()}    ${name}`));
+    logger.info({ mergedFiles: names }, `Merged files by ${task} script`);
+  };
+}
+
+// ------------------------------------ MSG: notMergeFiles
+function notMergeFiles_4l(msger, logger) {
+  return (notMergedItems, task) => {
+    // <- array of modified walkOutput items
+    const names = notMergedItems.map(itm => [itm.parent, itm.newName]);
+    msger.info(
+      `Those files are NOT merged. Resolve it manually (${colorWith("yellow")(
+        "!"
+      )}):`
+    );
+    names.forEach(name => msger.log(`${addTab()}    ${name[0]} / ${name[1]}`));
+    logger.info(
+      { notMergedFiles: names },
+      `Not merged files by ${task} script`
+    );
   };
 }
 

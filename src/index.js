@@ -2,6 +2,7 @@
 const execTaskBackup = require("./task-backup.js");
 const execTaskPresort = require("./task-presort.js");
 const execTaskRename = require("./task-rename.js");
+const execTaskMerge = require("./task-merge.js");
 const { initLogger } = require("./logger.js"); //initUiLogger
 const resolveAllOptions = require("./config.js");
 
@@ -30,11 +31,13 @@ async function runThis(args) {
     const taskCommandChosen =
       command === "backup"
         ? await execTaskBackup(endOptions, log)
-        : command === "presort"
-          ? await execTaskPresort(endOptions, log)
-          : command === "rename"
-            ? await execTaskRename(endOptions, log)
-            : throwNoCommandFound(command);
+        : command === "merge"
+          ? await execTaskMerge(endOptions, log)
+          : command === "presort"
+            ? await execTaskPresort(endOptions, log)
+            : command === "rename"
+              ? await execTaskRename(endOptions, log)
+              : throwNoCommandFound(command);
     log.saveLogFile();
     log.done();
   } catch (error) {

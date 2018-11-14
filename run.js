@@ -5,7 +5,7 @@ const { runThis } = require("./src/index.js");
 // See: config.js for available options reference.
 
 const args = {
-  command: "presort",
+  command: "merge",
   config: "dev"
 };
 
