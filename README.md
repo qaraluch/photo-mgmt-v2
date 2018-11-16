@@ -20,6 +20,7 @@
 - **Backups** all photos before further processing.
 - **Normalizes**: photo names by their creation date.
 - **Pulls up**: EXIF metadata for rename process.
+- **Merge**: photos into one common dir.
 - **Adds**: description to the photo file name.
 
 :warning: Disclaimer:
