@@ -209,6 +209,7 @@ function mergeRename(walkOutput) {
   const infoToRename = pullInfoFromWalk(walkOutput);
   const xform = R.compose(
     R.map(getInfoFromFileNameMapper),
+    R.map(addVersions),
     R.map(writeInfoIfProperNamed),
     R.map(reassemblyFileName)
   );

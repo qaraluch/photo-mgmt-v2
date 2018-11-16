@@ -51,9 +51,17 @@ function throwNoCommandFound(command) {
 
 function runFromCli(args) {
   const cliCommand = args.input[0];
+  const cliPositional = getPositional(args.input);
   const flags = args.flags;
-  const command = Object.assign({}, { command: cliCommand }, flags);
+  const command = Object.assign({}, { command: cliCommand }, flags, {
+    positional: cliPositional
+  });
   runThis(command);
+}
+
+function getPositional(input) {
+  const positional = input.slice(1);
+  return positional.length == 0 ? undefined : positional;
 }
 
 module.exports = {

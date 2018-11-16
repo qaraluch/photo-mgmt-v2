@@ -14,12 +14,15 @@ const appOptions = {
 const predefinedPathOptions = {
   cu: undefined,
   cuBackup: undefined,
-  cuPresort: undefined
+  cuPresort: undefined,
+  mergeDirName: undefined,
+  mergeDirsInput: undefined
 };
 
 const cliOptions = {
   inputDir: undefined,
-  outputDir: undefined
+  outputDir: undefined,
+  positional: undefined
 };
 
 const taskDefaultOptions = {

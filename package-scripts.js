@@ -9,6 +9,10 @@ module.exports = {
       default: {
         description: "Run node.js debug",
         script: "node --inspect-brk run.js"
+      },
+      cli: {
+        description: "Run node.js debug for CLI",
+        script: "node --inspect-brk src/cli.js"
       }
     },
     clear: {

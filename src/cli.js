@@ -123,15 +123,26 @@ const args = meow(
      (tag) to photo names. It can also add tag after parent dir name. 
 
       Examples:
-        photo-mgmt rename -c configTestRename --tag myDir
-        photo-mgmt rename -c configTestRename -t myDir
-        photo-mgmt rename -c configTestRename --rename-after-parent-dir
-        photo-mgmt rename -c configTestRename -r
-        photo-mgmt rename -c configTestRename --input-dir "./test/fixtures/cu-presort-rename/some-dir/"
-        photo-mgmt rename -c configTestRename -i "./test/fixtures/cu-presort-rename/some-dir/"
-        photo-mgmt rename -c configTestRename -i #rename in cwd 
-        photo-mgmt rename -c configTestRename --exclude-dirs "some-dir"
-        photo-mgmt rename -c configTestRename -e "some-dir"
+        photo-mgmt rename -c dev-rename --tag myDir
+        photo-mgmt rename -c dev-rename -t myDir
+        photo-mgmt rename -c dev-rename --rename-after-parent-dir
+        photo-mgmt rename -c dev-rename -r
+        photo-mgmt rename -c dev-rename --input-dir "./test/fixtures/cu-presort-rename/some-dir/"
+        photo-mgmt rename -c dev-rename -i "./test/fixtures/cu-presort-rename/some-dir/"
+        photo-mgmt rename -c dev-rename -i #rename in cwd 
+        photo-mgmt rename -c dev-rename --exclude-dirs "some-dir"
+        photo-mgmt rename -c dev-rename -e "some-dir"
+
+  4. Merge
+     This task movies photos (only ones with proper name) into common dir. When there are
+     photos with the same name, the task script bumps up the version part of the name of one of them. 
+
+      Examples:
+        photo-mgmt merge --output-dir "./test/fixtures/merge/merged2"
+        photo-mgmt merge -o "./test/fixtures/merge/merged2"
+        photo-mgmt merge -o #merge to temporary dir in cwd
+        photo-mgmt merge ./test/fixtures/merge/merge-b ./test/fixtures/merge/merge-c
+      
 
   Options:
     -c, --config [name]             Pass in config name that specifies I/O dirs. See configs.
@@ -181,6 +192,8 @@ const args = meow(
 
     --log-output-dir [path]         Define log files saving directory. 
                                     Default: current working directory.
+
+  Proper photo format: <year>-<month>-<day> <hour>.<minute>.<seconde>-<version> - <tag> - <description>
 
   Global options (overrides above)
     --help 

@@ -4,30 +4,37 @@ const makeDir = require("make-dir");
 const { getAllFiles } = require("./walker.js");
 const { mergeRename } = require("./rename.js");
 const { moveFilesTo } = require("./move-files.js");
-const { chooseWhichPath } = require("./utils.js");
+const { chooseWhichPath, getFileTimeStamp } = require("./utils.js");
 
 async function runTaskMerge(args, log) {
   try {
     const {
       cwd,
       command,
+      positional,
       mergeDirsInput,
       mergedDirName,
       dryRun,
-      inputDir,
       outputDir
     } = args;
     log.startTask(command);
     log.argsTask(command, {
       cwd,
+      positional,
       dryRun,
-      inputDir,
+      mergeDirsInput,
+      mergedDirName,
       outputDir
     });
-    const outputPath = chooseWhichPath(outputDir, mergedDirName, cwd);
+    const outputPath = chooseWhichPath(
+      outputDir,
+      mergedDirName,
+      `./temp-merged-${getFileTimeStamp()}`
+    );
     await makeDir(outputPath);
-    log.inputDirs(mergeDirsInput, command);
-    const walkOutputPromises = mergeDirsInput.map(path => getAllFiles(path));
+    const inputPaths = chooseWhichPath(positional, mergeDirsInput, cwd);
+    log.inputDirs(inputPaths, command);
+    const walkOutputPromises = inputPaths.map(path => getAllFiles(path));
     const walkOutputArray = await Promise.all(walkOutputPromises);
     const walkOutput = [].concat(...walkOutputArray);
     const numberFiles = walkOutput.length;
