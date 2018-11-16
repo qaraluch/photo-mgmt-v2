@@ -76,12 +76,13 @@ const args = meow(
   Personal photo management scripts.
   
 	Usage:
-    photo-mgmt <command> --flag=<input> 
+    photo-mgmt <command> --flag <value> 
     
     <command> - available task commands:
       - backup
       - presort
       - rename
+      - merge
     
   1. Backup
      Simply zip up photos for temporary backup. Automatically performs 
@@ -158,7 +159,7 @@ const args = meow(
                                     Default: "cu-temp-arch".
 
     -d, --dry-run                   Dry run. Disable all operations on files. 
-                                    Apples only to presort and rename tasks.  
+                                    Apples only to presort, merge and rename tasks.  
                                     Default: no.
 
     -t, --tag <name>                When perform rename task it adds tag to filename.
