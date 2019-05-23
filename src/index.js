@@ -32,12 +32,12 @@ async function runThis(args) {
       command === "backup"
         ? await execTaskBackup(endOptions, log)
         : command === "merge"
-          ? await execTaskMerge(endOptions, log)
-          : command === "presort"
-            ? await execTaskPresort(endOptions, log)
-            : command === "rename"
-              ? await execTaskRename(endOptions, log)
-              : throwNoCommandFound(command);
+        ? await execTaskMerge(endOptions, log)
+        : command === "presort"
+        ? await execTaskPresort(endOptions, log)
+        : command === "rename"
+        ? await execTaskRename(endOptions, log)
+        : throwNoCommandFound(command);
     log.saveLogFile();
     log.done();
   } catch (error) {
@@ -56,7 +56,11 @@ function runFromCli(args) {
   const command = Object.assign({}, { command: cliCommand }, flags, {
     positional: cliPositional
   });
-  runThis(command);
+  if (cliCommand === undefined) {
+    args.showHelp();
+  } else {
+    runThis(command);
+  }
 }
 
 function getPositional(input) {
