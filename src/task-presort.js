@@ -20,7 +20,7 @@ async function runTaskPresort(args, log) {
     });
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
     log.inputDir(inputPath, command);
-    const outputPath = chooseWhichPath(
+    const outputPath = chooseWhichPathPresort(
       outputDir,
       cuPresort,
       `./temp-cu-presort-${getFileTimeStamp()}`
@@ -41,6 +41,13 @@ async function runTaskPresort(args, log) {
   } catch (error) {
     log.error(error);
   }
+}
+
+// special case for presort
+function chooseWhichPathPresort(flagPath, configPath, cwdPath) {
+  const chosen =
+    flagPath === undefined ? cwdPath : flagPath === "" ? cwdPath : flagPath;
+  return chosen;
 }
 
 module.exports = runTaskPresort;

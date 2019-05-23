@@ -54,8 +54,8 @@ function chooseConfig(configName) {
     configName === "dev"
       ? configDev
       : configName === "dev-rename"
-        ? configDevRename
-        : configDev;
+      ? configDevRename
+      : configHot;
   return chosen;
 }
 
@@ -76,6 +76,12 @@ const configDevRename = {
   cu: "./test/fixtures/cu/",
   cuBackup: "./test/fixtures/cu-backup/",
   cuPresort: "./test/fixtures/cu-presort-rename/"
+};
+
+const configHot = {
+  logOutputDir: "./.logs",
+  cu: ".",
+  cuBackup: "."
 };
 
 module.exports = resolveAllOptions;
