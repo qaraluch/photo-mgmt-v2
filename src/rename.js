@@ -84,7 +84,7 @@ function getMetaData(item) {
         item.exif.DateTimeOriginal &&
           correctExifDate(item.exif.DateTimeOriginal)
       );
-    } else if (newExt === ".mp4") {
+    } else if (newExt === ".mp4" || newExt === ".mov") {
       item.date = getDateFromMetadata(
         item.exif.TrackCreateDate && correctExifDate(item.exif.TrackCreateDate)
       );
@@ -146,8 +146,8 @@ const makeCommentWithHyphen = comment =>
   typeof comment === "undefined"
     ? ""
     : typeof comment === "object" //for null case
-      ? ""
-      : ` - ${comment}`;
+    ? ""
+    : ` - ${comment}`;
 
 function reassemblyFileName(item) {
   const { date } = item;

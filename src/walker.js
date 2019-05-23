@@ -4,7 +4,7 @@ const path = require("path");
 const globOptions = { nocase: true };
 //TODOC: case insensitive extension files.
 
-const glob = ["*.jpg", "*.jpeg", "*.png", "*.mp4", "*.gif"];
+const glob = ["*.jpg", "*.jpeg", "*.png", "*.mp4", "*.gif", "*.mov"];
 //TODOC: list of supported extensions.
 
 async function getAllFiles(scanPath, filterOut) {
