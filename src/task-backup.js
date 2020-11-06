@@ -16,7 +16,7 @@ async function runTaskBackup(args, log) {
       checkArchive,
       inputDir,
       outputDir,
-      prefixArchiveName
+      prefixArchiveName,
     } = args;
     log.startTask(command);
     log.argsTask(command, {
@@ -26,7 +26,7 @@ async function runTaskBackup(args, log) {
       checkArchive,
       inputDir,
       outputDir,
-      prefixArchiveName
+      prefixArchiveName,
     });
     const inputPath = chooseWhichPath(inputDir, cu, cwd);
     log.inputDir(inputPath, "presort");
@@ -58,7 +58,7 @@ async function runTaskBackup(args, log) {
 }
 
 function copyPathsForBackup(walkOutput) {
-  const copyPaths = [...walkOutput.map(item => [item.path, item.crown])]; // arr[1] - internal archive dir structure
+  const copyPaths = [...walkOutput.map((item) => [item.path, item.crown])]; // arr[1] - internal archive dir structure
   return copyPaths;
 }
 
