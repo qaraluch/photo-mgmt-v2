@@ -15,14 +15,14 @@ async function runThis(args) {
       silent,
       disableFileLogs,
       logFilePrefix,
-      logOutputDir
+      logOutputDir,
     } = endOptions;
     const logOptions = {
       delimiter,
       silent,
       disableFileLogs,
       logFilePrefix,
-      logOutputDir
+      logOutputDir,
     };
     const log = await initLogger({ logOptions }); // bunyanOptions signaleOptions
     log.welcome();
@@ -54,7 +54,7 @@ function runFromCli(args) {
   const cliPositional = getPositional(args.input);
   const flags = args.flags;
   const command = Object.assign({}, { command: cliCommand }, flags, {
-    positional: cliPositional
+    positional: cliPositional,
   });
   if (cliCommand === undefined) {
     args.showHelp();
@@ -70,5 +70,5 @@ function getPositional(input) {
 
 module.exports = {
   runFromCli,
-  runThis
+  runThis,
 };

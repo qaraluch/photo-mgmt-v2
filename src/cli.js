@@ -7,66 +7,66 @@ const options = {
   flags: {
     checkArchive: {
       type: "boolean",
-      default: true // have to be here in order to work --no-check-archive
+      default: true, // have to be here in order to work --no-check-archive
     },
     prefixArchiveName: {
       type: "string",
-      default: undefined
+      default: "",
     },
     config: {
       type: "string",
       alias: "c",
-      default: undefined
+      default: "",
     },
     tag: {
       type: "string",
       alias: "t",
-      default: undefined
+      default: "",
     },
     renameAfterParentDir: {
       type: "boolean",
       alias: "r",
-      default: undefined
+      default: false,
     },
     inputDir: {
       type: "string",
       alias: "i",
-      default: undefined
+      default: "",
     },
     outputDir: {
       type: "string",
       alias: "o",
-      default: undefined
+      default: "",
     },
     excludeDirs: {
       type: "string",
       alias: "e",
-      default: undefined
+      default: "",
     },
     dryRun: {
       type: "boolean",
       alias: "d",
-      default: undefined
+      default: false,
     },
     silent: {
       type: "boolean",
       alias: "s",
-      default: undefined
+      default: false,
     },
     disableFileLogs: {
       type: "boolean",
       alias: "l",
-      default: undefined
+      default: false,
     },
     logFilePrefix: {
       type: "string",
-      default: undefined
+      default: "",
     },
     logOutputDir: {
       type: "string",
-      default: undefined
-    }
-  }
+      default: "",
+    },
+  },
 };
 
 const args = meow(
